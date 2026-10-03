@@ -90,6 +90,14 @@ Theo template của đơn vị (mẫu khung trong `references/mau-tai-lieu.md`);
 ai dùng, các bước có ảnh chụp từ bản đã test (không dùng ảnh mockup), lỗi thường gặp và cách xử lý.
 Mỗi mục HDSD ghi mã UC.
 
+## Điều phối agent (khi chạy trong Claude Code)
+Phiên chính mạnh (effort cao) giữ việc cần phán đoán: phân loại CR, PRD, đặc tả, review, verify. Subagent
+effort `medium` làm việc tốn ngữ cảnh: **explorer** (bước 0, phân tích ảnh hưởng - chỉ đọc), **researcher**
+(bước 2 - tra cứu, ghi mức nguồn), **worker** (bước 4-5 - sửa code, chạy test). **Advisor** (`/advisor`) được
+yêu cầu tường minh trước GATE 1, khi lỗi lặp lại, và trước GATE 4; ý kiến advisor là phản biện, không thay
+người chốt. Việc xác định được bằng luật thì chạy bằng script, việc mơ hồ thì đẩy lên tầng trên đến người
+chốt GATE. Chi tiết, cấu hình, chi phí: `references/dieu-phoi-agent.md`.
+
 ## Biên bản GATE và truy vết
 - Mỗi GATE có biên bản: phiên bản tài liệu được chốt, người chốt, ngày, điều kiện kèm theo, mục còn
   mở. Mẫu trong `references/mau-tai-lieu.md`. Không có biên bản = chưa qua GATE.
