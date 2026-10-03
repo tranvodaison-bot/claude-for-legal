@@ -42,6 +42,15 @@ mức/đối tượng, mở truy vết, **xuất CSV theo bộ lọc** (UTF-8, c
 in được; bản in nền trắng, mở toàn bộ chi tiết. Đặc tả: `docs/dac-ta-dashboard.md` (lập theo skill
 `dac-ta-ui-nghiep-vu` trong `skills/`).
 
+## Skill đi kèm (`skills/`) và quy trình phát triển
+
+- `skills/dac-ta-ui-nghiep-vu/` - đặc tả và nghiệm thu giao diện (đã dùng để dựng báo cáo web).
+- `skills/vong-doi-yeu-cau-phan-mem/` - vòng đời yêu cầu có GATE: phân loại CR theo rủi ro, PRD, đặc tả,
+  coding, test E2E, UAT, HDSD; sổ UC Master và script kiểm truy vết.
+- Sổ truy vết của chính dự án: `docs/uc-master.yaml`. Kiểm bằng
+  `python3 skills/vong-doi-yeu-cau-phan-mem/scripts/check_trace.py docs/uc-master.yaml`.
+  Hiện trạng: 3 GATE chưa có người chốt, 5 UC chưa có user story (dự án được dựng trước khi có quy trình).
+
 ## Hiệu lực và chuyển tiếp
 
 - `data/legal_registry.yaml` - sổ văn bản theo 13 lĩnh vực (Luật XD, NĐ hoạt động XD, chi phí, chất lượng,

@@ -1,0 +1,52 @@
+# Sổ UC Master của cross-check-engine (theo skill vong-doi-yeu-cau-phan-mem).
+# Ghi đúng hiện trạng 03/10/2026: phần mềm đã được dựng TRƯỚC khi có biên bản GATE nào,
+# nên các GATE dưới đây đang chờ Ban QLDA chốt (thiếu `by`/`date`).
+project: cross-check-engine
+gates:
+  - {id: GATE-1, scope: "Phạm vi + mô hình dữ liệu + danh sách UC: docs/PLOS-danh-gia-va-ke-hoach.md, README.md"}
+  - {id: GATE-2, scope: "Màn hình báo cáo web: docs/dac-ta-dashboard.md"}
+  - {id: GATE-3, scope: "Luồng xử lý + định dạng dữ liệu vào/ra (YAML hồ sơ, sổ văn bản, quy tắc chuyển tiếp, CLI)"}
+use_cases:
+  - id: UC-001
+    name: Đối soát trình tự - điều kiện tiên quyết giữa các bước
+    status: tested
+    stories: []   # chưa viết user story - phát hiện thật, không điền mã giả
+    apis: [CLI-crosscheck]
+    tests: [TC-ENG]
+    gates: [GATE-1, GATE-3]
+  - id: UC-002
+    name: Đối soát hiệu lực căn cứ viện dẫn và chuyển tiếp 2021-2026
+    status: tested
+    stories: []   # chưa viết user story - phát hiện thật, không điền mã giả
+    apis: [CLI-crosscheck]
+    tests: [TC-TMP]
+    gates: [GATE-1, GATE-3]
+  - id: UC-003
+    name: Bản đồ chế độ pháp lý theo ngày sự kiện
+    status: tested
+    stories: []   # chưa viết user story - phát hiện thật, không điền mã giả
+    apis: [CLI-crosscheck]
+    tests: [TC-TMP]
+    gates: [GATE-1, GATE-3]
+  - id: UC-004
+    name: Báo cáo web - lọc, truy vết, xuất CSV, in
+    status: tested
+    stories: []   # chưa viết user story - phát hiện thật, không điền mã giả
+    screens: [MH-BAO-CAO-WEB]
+    tests: [TC-DSB, TC-UI]
+    gates: [GATE-1, GATE-2]
+  - id: UC-005
+    name: Báo cáo Markdown / JSON
+    status: tested
+    stories: []   # chưa viết user story - phát hiện thật, không điền mã giả
+    apis: [CLI-crosscheck]
+    tests: [TC-ENG]
+    gates: [GATE-1]
+  - id: UC-006
+    name: Trích xuất hồ sơ PDF/Word thành YAML (kế hoạch M4)
+    status: draft
+tests:
+  - {id: TC-ENG, uc: UC-001, result: pass, ref: tests/test_engine.py}
+  - {id: TC-TMP, uc: UC-002, result: pass, ref: tests/test_temporal.py}
+  - {id: TC-DSB, uc: UC-004, result: pass, ref: tests/test_dashboard.py}
+  - {id: TC-UI, uc: UC-004, result: pass, ref: tests/ui_acceptance.mjs}

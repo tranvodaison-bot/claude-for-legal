@@ -1,15 +1,15 @@
 ---
 name: dac-ta-ui-nghiep-vu
 description: >
-  Đặc tả, dựng và nghiệm thu giao diện phần mềm nghiệp vụ Ban QLDA / pháp chế / kiểm toán (dashboard
-  đối soát, báo cáo tuân thủ, bảng theo dõi hồ sơ, IPC, VO, rủi ro) theo khung 9 mục rút từ
-  prompt-driven-ui: hiểu việc, phong cách và token, từng vùng, trạng thái dữ liệu, responsive, nghiệm thu.
-  Kèm quy tắc nghiệp vụ: không số liệu giả, nhãn độ tin cậy, trạng thái chữ kèm màu, truy vết về căn cứ,
-  CSV chống chèn công thức, thoát HTML dữ liệu hồ sơ, bản in; có script chụp và kiểm bố cục 390/768/1440.
-  Kích hoạt khi: dựng giao diện, dashboard hoặc báo cáo HTML cho công cụ QLDA, pháp lý, kiểm toán, đối
-  soát; viết đặc tả UI cho phần mềm nội bộ; nghiệm thu giao diện trước bàn giao. KHÔNG dùng cho: chọn
-  phong cách thuần thẩm mỹ → ui-ux-pro-max; component shadcn/Tailwind → ui-styling; quy trình React/TDD
-  → netninja-master; landing page marketing.
+  Đặc tả, dựng và nghiệm thu GIAO DIỆN (màn hình, dashboard, báo cáo HTML) cho phần mềm nội bộ của Ban
+  QLDA và pháp chế, theo khung 9 mục rút từ prompt-driven-ui: hiểu việc, phong cách và token, từng vùng
+  màn hình, trạng thái dữ liệu, responsive, nghiệm thu. Kèm quy tắc hiển thị: không số liệu giả, nhãn độ
+  tin cậy, trạng thái chữ kèm màu, truy vết trên màn hình, CSV chống chèn công thức, thoát HTML, bản in;
+  có script chụp và kiểm bố cục 390/768/1440. Kích hoạt khi: dựng hoặc sửa giao diện web, dashboard,
+  báo cáo HTML cho công cụ nội bộ; viết đặc tả màn hình; nghiệm thu giao diện trước bàn giao. KHÔNG dùng
+  cho: nội dung nghiệp vụ (IPC, VO, kiểm toán, pháp lý) → skill chuyên ngành tương ứng; chọn phong cách
+  thuần thẩm mỹ → ui-ux-pro-max; component shadcn/Tailwind → ui-styling; React/TDD → netninja-master;
+  vòng đời CR/PRD/GATE → vong-doi-yeu-cau-phan-mem.
 ---
 
 # Đặc tả giao diện nghiệp vụ
@@ -42,6 +42,10 @@ Khóa một bộ biến: màu theo vai trò, font có đủ dấu tiếng Việt
 Dùng mẫu trong `references/khung-dac-ta.md`. Mỗi vùng nội dung ghi hai dòng: **Bố cục và hành vi** /
 **Nội dung và đầu ra**. Viết đặc tả ngắn rồi dựng luôn — đặc tả là công cụ, không phải sản phẩm.
 
+Thứ tự trình bày cho người chốt: **phác ASCII** (bố cục + trường dữ liệu, sửa trong vài phút) → khi
+bố cục ổn mới dựng **HTML tương tác với dữ liệu mẫu** để bấm thử → người dùng chốt (GATE 2 trong
+skill `vong-doi-yeu-cau-phan-mem`, có biên bản). Dựng HTML khi bố cục chưa chốt là tốn công sửa lại.
+
 ### 4. Áp quy tắc nghiệp vụ (bắt buộc với dữ liệu pháp lý/tài chính)
 Đọc `references/quy-tac-nghiep-vu.md`. Tóm tắt lý do từng nhóm:
 - **Không số liệu giả, không thành công giả** — người xem sẽ tin và hành động theo.
@@ -67,6 +71,9 @@ mục 9 của đặc tả (ví dụ "tổng các mức = tổng phát hiện", "
 
 Nếu trang có lọc/xuất CSV/mở chi tiết, viết thêm một script nghiệm thu riêng bằng Playwright cho các
 trường hợp ở mục 9 (cài dữ liệu độc: `<script>`, ô bắt đầu bằng `=`), để chạy lại mỗi lần sửa.
+
+Lệch giữa giao diện đã dựng và đặc tả đã chốt: sửa **giao diện**, không sửa đặc tả hay script nghiệm
+thu cho khớp. Đặc tả sai thật thì mở CR. Tối đa 3 vòng tự sửa rồi dừng báo cáo.
 
 ### 7. Báo cáo bàn giao
 Ngắn: đã làm gì, đã kiểm gì (kèm số liệu từ script), chưa kiểm gì, phần nào còn thiếu dữ liệu thật.
