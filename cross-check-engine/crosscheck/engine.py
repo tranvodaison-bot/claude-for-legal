@@ -7,8 +7,8 @@ from pathlib import Path
 
 import yaml
 
-HARD, SOFT, GAP = "HARD", "SOFT", "DATA_GAP"
-SEVERITY_ORDER = {HARD: 0, SOFT: 1, GAP: 2}
+HARD, SOFT, GAP, INFO = "HARD", "SOFT", "DATA_GAP", "INFO"
+SEVERITY_ORDER = {HARD: 0, SOFT: 1, GAP: 2, INFO: 3}
 STARTED = {"in_progress", "completed"}
 STATUSES = {"not_started", "in_progress", "completed", "not_applicable"}
 _MISSING = object()
@@ -28,6 +28,7 @@ class Finding:
     basis: list = field(default_factory=list)
     fix: str = ""
     trace: list = field(default_factory=list)
+    verified: bool = False
 
 
 def _load_yaml(path) -> dict:
@@ -67,6 +68,9 @@ def load_rules(path) -> dict:
         for p in s.get("prerequisites") or []:
             if p.get("step") not in rules:
                 raise RuleError(f"{path}: bước `{sid}` tham chiếu tiên quyết không tồn tại `{p.get('step')}`")
+            for b in p.get("basis") or []:
+                if not (b.get("doc") or b.get("domain")):
+                    raise RuleError(f"{path}: căn cứ của `{sid}` <- `{p['step']}` cần `doc` hoặc `domain`")
             if p.get("severity") not in ("hard", "soft"):
                 raise RuleError(f"{path}: `{sid}` <- `{p['step']}` cần severity hard|soft")
     _assert_acyclic(rules)
@@ -105,7 +109,27 @@ def _fmt(d) -> str:
     return d.strftime("%d/%m/%Y") if d else "chưa có ngày"
 
 
-def evaluate(project: dict, rules: dict, as_of: dt.date | None = None) -> list[Finding]:
+def resolve_basis(basis: list, registry, date) -> list:
+    """Căn cứ khai báo theo lĩnh vực -> văn bản chính có hiệu lực tại ngày sự kiện (chưa xét chuyển tiếp)."""
+    out = []
+    for b in basis:
+        if not b.get("domain"):
+            out.append(b)
+            continue
+        dom = b["domain"]
+        law = registry.regime_at(dom, date) if (registry and date) else None
+        if law:
+            out.append({"doc": f"{law['ten']} ({law['so_hieu']})", "provision": b.get("provision"),
+                        "verified": law["level"] == "primary" and bool(b.get("verified")),
+                        "note": f"theo ngày sự kiện {_fmt(date)}, chưa xét chuyển tiếp"})
+        else:
+            name = registry.domains.get(dom, dom) if registry else dom
+            out.append({"doc": f"{name} có hiệu lực tại thời điểm sự kiện", "provision": b.get("provision"),
+                        "verified": False})
+    return out
+
+
+def evaluate(project: dict, rules: dict, as_of: dt.date | None = None, registry=None) -> list[Finding]:
     as_of = as_of or dt.date.today()
     attrs = project.get("attributes") or {}
     recs = {k: dict(v or {}) for k, v in (project.get("steps") or {}).items()}
@@ -172,7 +196,9 @@ def evaluate(project: dict, rules: dict, as_of: dt.date | None = None) -> list[F
         for p in rule.get("prerequisites") or []:
             pid, sev = p["step"], (HARD if p["severity"] == "hard" else SOFT)
             prule = rules[pid]
-            base = dict(basis=p.get("basis") or [], fix=p.get("fix", ""))
+            basis = resolve_basis(p.get("basis") or [], registry, step_start)
+            base = dict(basis=basis, fix=p.get("fix", ""),
+                        verified=bool(basis) and all(b.get("verified") for b in basis))
             applies = _applies(prule, attrs)
             if applies is False:
                 continue

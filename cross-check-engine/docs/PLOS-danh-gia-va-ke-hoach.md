@@ -103,6 +103,29 @@ chuyển từ "bước" sang "sự kiện + chứng cứ" ở M1.
 Nguyên tắc chung cho mọi mốc: không mốc nào nạp căn cứ chưa đối chiếu văn bản gốc mà gắn
 `verified: true`. Mỗi quy tắc mới đi kèm test.
 
+## 5a. Cập nhật 03/10/2026: đã làm trước một phần M2 (giai đoạn 2021-2026)
+
+- Sổ văn bản 13 lĩnh vực, các mốc chuyển chế độ chính:
+  - 01/01/2021: Luật 62/2020 sửa Luật XD, Luật Đầu tư 2020.
+  - 26/01/2021: NĐ 06/2021.
+  - 09/02/2021: NĐ 10/2021.
+  - 03/03/2021: NĐ 15/2021.
+  - 01/04/2021: NĐ 50/2021.
+  - 01/01/2022: Luật BVMT 2020.
+  - 20/06/2023: NĐ 35/2023.
+  - 01/01/2024: Luật Đấu thầu 2023.
+  - 27/02/2024: NĐ 24/2024.
+  - 01/08/2024: Luật Đất đai 2024.
+  - 30/12/2024: NĐ 175/2024.
+  - 01/01/2025: Luật Đầu tư công 2024.
+  - 01/07/2025: chứng chỉ năng lực tổ chức bị bãi bỏ, NĐ 140/2025, Luật PCCC 2024.
+  - 01/01/2026: hiệu lực từng phần Luật 135/2025.
+  - 01/07/2026: Luật 135/2025, NĐ 206, 207, 210, 217/2026.
+- 12 quy tắc chuyển tiếp khung; đối soát căn cứ viện dẫn của từng văn bản dự án; bản đồ chế độ pháp lý.
+- Mọi ngày tháng chưa ở mức văn bản gốc nên kết luận bị giới hạn ở mức VÀNG.
+- Việc còn lại của M2: bóc điều khoản chuyển tiếp thật (điều/khoản, điều kiện chi tiết, nhất là chi phí),
+  đối chiếu toàn bộ ngày hiệu lực lên mức `primary`, bổ sung Thông tư hướng dẫn.
+
 ## 6. Quyết định cần Ban QLDA chốt trước M1
 
 1. **Hạ tầng**: một máy dùng cục bộ (SQLite, CLI và báo cáo) hay máy chủ nhiều người dùng ngay từ đầu?

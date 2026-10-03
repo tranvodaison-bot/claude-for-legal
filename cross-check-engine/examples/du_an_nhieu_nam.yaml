@@ -1,0 +1,67 @@
+# DỰ ÁN GIẢ LẬP kéo dài 2020-2026 để chạy thử đối soát hiệu lực và chuyển tiếp. Không phải dữ liệu thật.
+# Mỗi văn bản dự án khai báo: ngày ký, (ngày nộp / ngày phát hành HSMT / hợp đồng nếu có), các căn cứ viện dẫn.
+project:
+  id: DEMO-2021
+  name: Dự án mẫu nhiều năm (giả lập)
+attributes:
+  requires_permit: true
+  requires_design_verification: true
+  requires_safety_certification: false
+contracts:
+  HD-TC-01: {ngay_ky: 2024-11-15}
+steps:
+  lap_bcnckt: {status: completed, date: 2020-11-20}
+  tham_dinh_bcnckt: {status: completed, date: 2021-02-25}
+  phe_duyet_du_an: {status: completed, date: 2021-06-10, evidence: QD-PD-DA}
+  khao_sat: {status: completed, date: 2021-09-15}
+  giay_to_dat: {status: completed, date: 2021-12-01}
+  tham_tra_thiet_ke: {status: completed, date: 2022-01-15}
+  phe_duyet_thiet_ke_du_toan: {status: completed, date: 2022-03-20, evidence: QD-PD-TK}
+  cap_gpxd: {status: completed, date: 2023-05-10, evidence: GPXD-01}
+  ky_hop_dong_thi_cong: {status: completed, date: 2024-11-15, evidence: HD-TC-01}
+  khoi_cong: {status: completed, date: 2024-12-20}
+  nghiem_thu_hang_muc: {status: completed, date: 2026-08-20, evidence: BB-NT-HM}
+  nghiem_thu_hoan_thanh: {status: in_progress, start_date: 2026-09-15}
+documents:
+  - id: QD-PD-DA
+    loai: Quyết định phê duyệt dự án
+    ngay_ky: 2021-06-10
+    ngay_nop: 2021-02-20
+    can_cu: ["Luật Xây dựng số 50/2014/QH13", "Luật số 62/2020/QH14", "Nghị định 59/2015/NĐ-CP", "Nghị định 68/2019/NĐ-CP"]
+  - id: QD-PD-TK
+    loai: Quyết định phê duyệt thiết kế triển khai và dự toán
+    ngay_ky: 2022-03-20
+    ngay_nop: 2022-01-20
+    can_cu: ["Luật Xây dựng 2014", "Nghị định số 15/2021/NĐ-CP", "Nghị định 10/2021/NĐ-CP", "Thông tư 12/2021/TT-BXD"]
+  - id: GPXD-01
+    loai: Giấy phép xây dựng
+    ngay_ky: 2023-05-10
+    ngay_nop: 2023-03-01
+    can_cu: ["50/2014/QH13", "62/2020/QH14", "15/2021/NĐ-CP", "35/2023/NĐ-CP"]
+  - id: QD-HSMT
+    loai: Quyết định phê duyệt HSMT gói thầu thi công
+    ngay_ky: 2024-03-10
+    ngay_phat_hanh_hsmt: 2024-03-15
+    can_cu: ["Luật Đấu thầu 43/2013/QH13", "Nghị định 63/2014/NĐ-CP"]
+  - id: HD-TC-01
+    loai: Hợp đồng thi công
+    ngay_ky: 2024-11-15
+    can_cu: ["50/2014/QH13", "62/2020/QH14", "37/2015/NĐ-CP", "50/2021/NĐ-CP", "22/2023/QH15", "24/2024/NĐ-CP"]
+  - id: CV-MIEN-GP
+    loai: Văn bản xác định hạng mục phụ trợ miễn GPXD
+    ngay_ky: 2026-02-10
+    can_cu: [{van_ban: "135/2025/QH15", dieu_khoan: "Điều 43 khoản 2"}, "Luật Xây dựng 2025"]
+  - id: PL-HD-01
+    loai: Phụ lục hợp đồng (điều chỉnh khối lượng)
+    ngay_ky: 2026-08-10
+    hop_dong: HD-TC-01
+    can_cu: ["37/2015/NĐ-CP", "50/2021/NĐ-CP"]
+  - id: BB-NT-HM
+    loai: Biên bản nghiệm thu hạng mục
+    ngay_ky: 2026-08-20
+    can_cu: ["Nghị định 06/2021/NĐ-CP"]
+  - id: QD-DC-DA
+    loai: Quyết định điều chỉnh dự án
+    ngay_ky: 2026-09-01
+    ngay_nop: 2026-07-20
+    can_cu: ["50/2014/QH13", "Nghị định 175/2024/NĐ-CP", "Văn bản hợp nhất 91/2026/VBHN-NĐ-BXD"]

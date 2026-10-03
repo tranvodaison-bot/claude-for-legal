@@ -2,10 +2,9 @@
 # Nguồn: bảng 2.2 và 3.2 trong bản thiết kế của Ban QLDA.
 # Mọi `basis` đang ở trạng thái verified: false -> phải đối chiếu văn bản gốc
 # (điều/khoản) trước khi dùng kết quả làm căn cứ kết luận.
-# CẢNH BÁO (03/10/2026): theo tra cứu thứ cấp, NĐ 175/2024/NĐ-CP hết hiệu lực từ 01/07/2026
-# (thay bằng NĐ 217/2026/NĐ-CP - chưa xác minh). Căn cứ NĐ 175/2024 dưới đây chỉ có thể đúng với
-# sự kiện trước 01/07/2026. Engine chưa phân biệt chế độ pháp lý theo thời điểm (kế hoạch M2,
-# xem docs/PLOS-danh-gia-va-ke-hoach.md).
+# Căn cứ khai báo theo LĨNH VỰC (`domain`), không gắn cứng số hiệu: engine tra sổ văn bản
+# (data/legal_registry.yaml) để lấy văn bản chính có hiệu lực tại ngày sự kiện. Kết quả CHƯA xét
+# chuyển tiếp - việc đó do bước đối soát căn cứ viện dẫn (data/transition_rules.yaml) đảm nhận.
 version: 1
 steps:
   - id: lap_bcnckt
@@ -18,8 +17,8 @@ steps:
     prerequisites:
       - step: lap_bcnckt
         severity: hard
-        basis: &basis_nd175
-          - doc: "Nghị định 175/2024/NĐ-CP"
+        basis: &basis_hdxd
+          - domain: hoat_dong_xd
             provision: null
             verified: false
         fix: Hoàn tất lập BCNCKT trước khi trình thẩm định; kiểm tra ngày trình thẩm định.
@@ -30,7 +29,7 @@ steps:
     prerequisites:
       - step: tham_dinh_bcnckt
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Bổ sung kết quả thẩm định BCNCKT trước ngày phê duyệt, hoặc điều chỉnh hồ sơ theo đúng thứ tự.
 
   - id: khao_sat
@@ -39,7 +38,7 @@ steps:
     prerequisites:
       - step: phe_duyet_du_an
         severity: soft
-        basis: *basis_nd175
+        basis: *basis_hdxd
         note: Mức soft do chưa xác minh khảo sát giai đoạn lập dự án có thể diễn ra trước phê duyệt hay không.
         fix: Xác định khảo sát thuộc giai đoạn nào (lập dự án hay thiết kế triển khai) và ghi rõ trong hồ sơ.
 
@@ -50,7 +49,7 @@ steps:
     prerequisites:
       - step: khao_sat
         severity: soft
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Đối chiếu hồ sơ khảo sát dùng làm đầu vào của thẩm tra thiết kế.
 
   - id: phe_duyet_thiet_ke_du_toan
@@ -59,11 +58,11 @@ steps:
     prerequisites:
       - step: phe_duyet_du_an
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Phê duyệt thiết kế sau khi dự án đã được phê duyệt.
       - step: tham_tra_thiet_ke
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Hoàn tất thẩm tra thiết kế (nếu dự án thuộc diện bắt buộc) trước khi phê duyệt.
 
   - id: giay_to_dat
@@ -77,11 +76,11 @@ steps:
     prerequisites:
       - step: giay_to_dat
         severity: hard
-        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm cấp phép)", provision: null, verified: false}]
+        basis: [{domain: luat_xd, provision: null, verified: false}]
         fix: Bổ sung giấy tờ hợp pháp về đất trước khi nộp hồ sơ cấp phép.
       - step: phe_duyet_thiet_ke_du_toan
         severity: soft
-        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm cấp phép)", provision: null, verified: false}]
+        basis: [{domain: luat_xd, provision: null, verified: false}]
         note: Bảng thiết kế ghi "thiết kế đã được phê duyệt". Cần xác minh hồ sơ cấp phép yêu cầu bước thiết kế nào (có trường hợp cấp theo giai đoạn).
         fix: Xác nhận bước thiết kế mà hồ sơ cấp phép yêu cầu và điều chỉnh quy tắc nếu khác.
 
@@ -91,7 +90,7 @@ steps:
     prerequisites:
       - step: phe_duyet_du_an
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Hợp đồng chỉ ký sau khi dự án được phê duyệt; rà soát ngày ký và ngày phê duyệt.
 
   - id: khoi_cong
@@ -100,11 +99,11 @@ steps:
     prerequisites:
       - step: cap_gpxd
         severity: hard
-        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm khởi công)", provision: null, verified: false}]
+        basis: [{domain: luat_xd, provision: null, verified: false}]
         fix: Chỉ khởi công khi đã có giấy phép xây dựng (nếu thuộc diện); lập biên bản xử lý nếu đã khởi công sớm.
       - step: ky_hop_dong_thi_cong
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Hoàn tất ký hợp đồng thi công trước ngày khởi công.
 
   - id: nghiem_thu_hang_muc
@@ -113,7 +112,7 @@ steps:
     prerequisites:
       - step: khoi_cong
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Rà soát ngày nghiệm thu và nhật ký thi công.
 
   - id: chung_nhan_an_toan_chiu_luc
@@ -127,11 +126,11 @@ steps:
     prerequisites:
       - step: nghiem_thu_hang_muc
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Hoàn tất biên bản nghiệm thu các hạng mục trước nghiệm thu hoàn thành.
       - step: chung_nhan_an_toan_chiu_luc
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Bổ sung chứng nhận (nếu công trình thuộc diện bắt buộc) trước khi nghiệm thu.
 
   - id: quyet_toan_von
@@ -140,7 +139,7 @@ steps:
     prerequisites:
       - step: nghiem_thu_hoan_thanh
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Quyết toán sau khi có biên bản nghiệm thu hoàn thành.
 
   - id: ban_giao
@@ -149,5 +148,5 @@ steps:
     prerequisites:
       - step: nghiem_thu_hoan_thanh
         severity: hard
-        basis: *basis_nd175
+        basis: *basis_hdxd
         fix: Bàn giao sau khi có biên bản nghiệm thu hoàn thành.

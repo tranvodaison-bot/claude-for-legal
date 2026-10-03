@@ -1,0 +1,98 @@
+# Quy tắc chuyển tiếp: khi một văn bản DỰ ÁN ký sau ngày văn bản pháp luật cũ hết hiệu lực
+# mà vẫn viện dẫn văn bản cũ, kiểm tra có thuộc trường hợp được tiếp tục áp dụng văn bản cũ không.
+#
+# allow_old_if: chỉ cần MỘT điều kiện đúng. Mỗi điều kiện so một "ngày quyết định" với ranh giới
+#   (= ngày hiệu lực của văn bản mới). date_ref tra theo thứ tự: trường của văn bản dự án ->
+#   project.key_dates -> suy ra (ngay_ky_hop_dong từ `hop_dong`, ngay_phe_duyet_du_an từ steps).
+#
+# TOÀN BỘ quy tắc dưới đây là KHUNG GIẢ THUYẾT theo mẫu chuyển tiếp thường gặp, verified: false,
+# chưa có số điều/khoản. Phải bóc điều khoản chuyển tiếp thật của từng văn bản mới để xác nhận
+# hoặc sửa điều kiện. Văn bản không có quy tắc ở đây -> engine báo "chưa có quy tắc chuyển tiếp".
+version: 1
+transitions:
+  - id: TR-HDXD-2021
+    from: nd_59_2015
+    to: nd_15_2021
+    allow_old_if:
+      - {date_ref: ngay_nop, label: "Hồ sơ nộp (thẩm định/phê duyệt) trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 15/2021/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-HDXD-2024
+    from: nd_15_2021
+    to: nd_175_2024
+    allow_old_if:
+      - {date_ref: ngay_nop, label: "Hồ sơ nộp trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 175/2024/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-HDXD-2026
+    from: nd_175_2024
+    to: nd_217_2026
+    allow_old_if:
+      - {date_ref: ngay_nop, label: "Hồ sơ nộp trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 217/2026/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-LXD-2026
+    from: luat_50_2014
+    to: luat_135_2025
+    allow_old_if:
+      - {date_ref: ngay_nop, label: "Hồ sơ nộp trước ngày Luật mới có hiệu lực"}
+    note: Luật 135/2025 có hiệu lực từng phần từ 01/01/2026; điều khoản chuyển tiếp cần bóc chi tiết.
+    basis: [{doc: "Điều khoản chuyển tiếp Luật 135/2025/QH15", provision: null, verified: false}]
+
+  - id: TR-CP-2021
+    from: nd_68_2019
+    to: nd_10_2021
+    allow_old_if:
+      - {date_ref: ngay_phe_duyet_du_an, label: "Dự án/TMĐT phê duyệt trước ngày NĐ mới có hiệu lực"}
+    note: Chuyển tiếp chi phí thường tách nhiều trường hợp (TMĐT, dự toán, gói thầu đã/chưa phát hành HSMT).
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 10/2021/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-CP-2026
+    from: nd_10_2021
+    to: nd_206_2026
+    allow_old_if:
+      - {date_ref: ngay_phe_duyet_du_an, label: "Dự án/TMĐT phê duyệt trước ngày NĐ mới có hiệu lực"}
+    note: Như TR-CP-2021 - cần tách theo TMĐT, dự toán, gói thầu.
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 206/2026/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-CL-2021
+    from: nd_46_2015
+    to: nd_06_2021
+    allow_old_if:
+      - {date_ref: ngay_ky_hop_dong, label: "Hợp đồng thi công ký trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 06/2021/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-CL-2026
+    from: nd_06_2021
+    to: nd_207_2026
+    allow_old_if:
+      - {date_ref: ngay_ky_hop_dong, label: "Hợp đồng thi công ký trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 207/2026/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-HD-2026
+    from: nd_37_2015
+    to: nd_210_2026
+    allow_old_if:
+      - {date_ref: ngay_ky_hop_dong, label: "Hợp đồng ký trước ngày NĐ mới có hiệu lực (văn bản thuộc hợp đồng đó)"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 210/2026/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-DT-2024
+    from: luat_43_2013
+    to: luat_22_2023
+    allow_old_if:
+      - {date_ref: ngay_phat_hanh_hsmt, label: "HSMT/HSYC phát hành trước ngày Luật mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp Luật Đấu thầu 22/2023/QH15", provision: null, verified: false}]
+
+  - id: TR-DTND-2024
+    from: nd_63_2014
+    to: nd_24_2024
+    allow_old_if:
+      - {date_ref: ngay_phat_hanh_hsmt, label: "HSMT/HSYC phát hành trước ngày NĐ mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp NĐ 24/2024/NĐ-CP", provision: null, verified: false}]
+
+  - id: TR-DD-2024
+    from: luat_45_2013
+    to: luat_31_2024
+    allow_old_if:
+      - {date_ref: ngay_nop, label: "Hồ sơ nộp trước ngày Luật mới có hiệu lực"}
+    basis: [{doc: "Điều khoản chuyển tiếp Luật Đất đai 31/2024/QH15", provision: null, verified: false}]

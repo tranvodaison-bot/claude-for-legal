@@ -1,0 +1,172 @@
+# Sổ văn bản theo thời gian (trọng tâm 2021-2026, kèm văn bản gốc trước 2021 làm mốc chuyển tiếp).
+#
+# level  : primary   = đã đối chiếu văn bản gốc (Công báo)
+#          secondary = tra cứu trang thứ cấp ngày 03/10/2026, chưa đọc văn bản gốc
+#          recall    = theo hiểu biết của người lập, CHƯA tra cứu
+# role   : chinh (văn bản chính của lĩnh vực) | sua_doi | hop_nhat (VBHN - lớp hiển thị, không phải nguồn gốc)
+# het_hieu_luc: để trống nếu suy ra được từ văn bản thay thế (`replaces`).
+# Chỉ kết luận ở mức primary mới được tạo phát hiện mức ĐỎ.
+version: 1
+domains:
+  luat_xd: Luật Xây dựng
+  hoat_dong_xd: NĐ quản lý dự án / hoạt động xây dựng
+  chi_phi: NĐ quản lý chi phí ĐTXD
+  chat_luong: NĐ quản lý chất lượng, thi công, bảo trì
+  hop_dong: NĐ hợp đồng xây dựng
+  dau_thau_luat: Luật Đấu thầu
+  dau_thau_nd: NĐ hướng dẫn Luật Đấu thầu
+  dau_tu: Luật Đầu tư
+  dau_tu_cong: Luật Đầu tư công
+  dat_dai: Luật Đất đai
+  moi_truong: Luật Bảo vệ môi trường
+  pccc: Luật PCCC
+  tham_quyen: Phân định thẩm quyền (chính quyền 2 cấp)
+report_domains: [luat_xd, hoat_dong_xd, chi_phi, hop_dong, chat_luong]
+
+documents:
+  # ---------------- Luật Xây dựng ----------------
+  - {id: luat_50_2014, so_hieu: "50/2014/QH13", ten: "Luật Xây dựng 2014", domain: luat_xd, role: chinh,
+     hieu_luc_tu: 2015-01-01, level: recall, aliases: ["Luật Xây dựng 2014"]}
+  - {id: luat_62_2020, so_hieu: "62/2020/QH14", ten: "Luật sửa đổi, bổ sung một số điều của Luật Xây dựng",
+     domain: luat_xd, role: sua_doi, amends: [luat_50_2014], hieu_luc_tu: 2021-01-01, level: recall}
+  - id: luat_95_2025
+    so_hieu: "95/2025/QH15"
+    ten: "Luật Đường sắt (Điều 56 khoản 1 bãi bỏ khoản 4 Điều 148 Luật XD 2014 - chứng chỉ năng lực tổ chức)"
+    domain: luat_xd
+    role: sua_doi
+    amends: [luat_50_2014]
+    hieu_luc_tu: null
+    partial_effect: [{from: 2025-07-01, provisions: ["Điều 56 khoản 1"]}]
+    level: secondary
+    note: Ngày hiệu lực chung của Luật Đường sắt chưa tra; chỉ nạp phần hiệu lực của Điều 56 khoản 1.
+  - id: luat_135_2025
+    so_hieu: "135/2025/QH15"
+    ten: "Luật Xây dựng 2025"
+    domain: luat_xd
+    role: chinh
+    ngay_ban_hanh: 2025-12-10
+    hieu_luc_tu: 2026-07-01
+    partial_effect:
+      - from: 2026-01-01
+        provisions: ["Điều 43 khoản 2", "Điều 43 khoản 3", "Điều 71", "Điều 95 khoản 3", "Điều 95 khoản 4", "Điều 95 khoản 5"]
+    replaces: [luat_50_2014]
+    level: secondary
+    aliases: ["Luật Xây dựng 2025"]
+    sources: ["https://thuvienphapluat.vn/phap-luat-nha-dat/luat-xay-dung-2025-luat-so-1352025qh15-co-hieu-luc-tu-khi-nao-13359.html"]
+
+  # ---------------- NĐ quản lý dự án / hoạt động xây dựng ----------------
+  - {id: nd_59_2015, so_hieu: "59/2015/NĐ-CP", ten: "NĐ quản lý dự án đầu tư xây dựng", domain: hoat_dong_xd,
+     role: chinh, hieu_luc_tu: 2015-08-05, level: recall}
+  - {id: nd_15_2021, so_hieu: "15/2021/NĐ-CP", ten: "NĐ quy định chi tiết một số nội dung về quản lý dự án ĐTXD",
+     domain: hoat_dong_xd, role: chinh, hieu_luc_tu: 2021-03-03, replaces: [nd_59_2015], level: recall}
+  - id: nd_35_2023
+    so_hieu: "35/2023/NĐ-CP"
+    ten: "NĐ sửa đổi, bổ sung một số điều của các NĐ thuộc lĩnh vực quản lý nhà nước của Bộ Xây dựng"
+    domain: hoat_dong_xd
+    role: sua_doi
+    amends: [nd_15_2021]
+    hieu_luc_tu: 2023-06-20
+    level: recall
+    note: Sửa đổi nhiều NĐ (danh mục đầy đủ cần xác minh); mới nạp quan hệ với NĐ 15/2021.
+  - {id: nd_175_2024, so_hieu: "175/2024/NĐ-CP", ten: "NĐ quy định chi tiết một số điều và biện pháp thi hành Luật XD về quản lý hoạt động xây dựng",
+     domain: hoat_dong_xd, role: chinh, hieu_luc_tu: 2024-12-30, replaces: [nd_15_2021], level: recall}
+  - id: nd_217_2026
+    so_hieu: "217/2026/NĐ-CP"
+    ten: "NĐ quy định chi tiết một số điều của Luật XD về quản lý hoạt động xây dựng"
+    domain: hoat_dong_xd
+    role: chinh
+    ngay_ban_hanh: 2026-06-19
+    hieu_luc_tu: 2026-07-01
+    replaces: [nd_175_2024]
+    level: secondary
+    note: Một nguồn thứ cấp ghi "thay thế NĐ 174/2024" (nghi lỗi đánh máy); đa số nguồn ghi NĐ 175/2024.
+    sources: ["https://luatvietnam.vn/tin-van-ban-moi/da-co-nghi-dinh-217-2026-nd-cp-quy-dinh-ve-quan-ly-hoat-dong-xay-dung-tu-01-7-2026-186-109712-article.html"]
+  - id: vbhn_91_2026
+    so_hieu: "91/2026/VBHN-NĐ-BXD"
+    ten: "VBHN Nghị định quy định chi tiết một số điều của Luật XD về quản lý hoạt động xây dựng"
+    domain: hoat_dong_xd
+    role: hop_nhat
+    consolidates: null
+    hieu_luc_tu: 2026-09-25
+    level: secondary
+    note: Chưa xác định văn bản được hợp nhất (giả thuyết - NĐ 217/2026 và văn bản sửa đổi).
+
+  # ---------------- Chi phí ----------------
+  - {id: nd_68_2019, so_hieu: "68/2019/NĐ-CP", ten: "NĐ quản lý chi phí ĐTXD", domain: chi_phi, role: chinh,
+     hieu_luc_tu: 2019-10-01, level: recall}
+  - {id: nd_10_2021, so_hieu: "10/2021/NĐ-CP", ten: "NĐ quản lý chi phí ĐTXD", domain: chi_phi, role: chinh,
+     hieu_luc_tu: 2021-02-09, replaces: [nd_68_2019], level: recall}
+  - {id: nd_206_2026, so_hieu: "206/2026/NĐ-CP", ten: "NĐ quy định chi tiết về quản lý chi phí ĐTXD", domain: chi_phi,
+     role: chinh, ngay_ban_hanh: 2026-06-15, hieu_luc_tu: 2026-07-01, replaces: [nd_10_2021], level: secondary,
+     sources: ["https://luatvietnam.vn/dau-tu/nghi-dinh-206-2026-nd-cp-quy-dinh-chi-tiet-quan-ly-chi-phi-dau-tu-xay-dung-437591-d1.html"]}
+
+  # ---------------- Chất lượng ----------------
+  - {id: nd_46_2015, so_hieu: "46/2015/NĐ-CP", ten: "NĐ quản lý chất lượng và bảo trì công trình", domain: chat_luong,
+     role: chinh, hieu_luc_tu: 2015-07-01, level: recall}
+  - {id: nd_06_2021, so_hieu: "06/2021/NĐ-CP", ten: "NĐ quản lý chất lượng, thi công xây dựng và bảo trì", domain: chat_luong,
+     role: chinh, hieu_luc_tu: 2021-01-26, replaces: [nd_46_2015], level: recall}
+  - {id: nd_207_2026, so_hieu: "207/2026/NĐ-CP", ten: "NĐ quản lý chất lượng, thi công xây dựng và bảo trì", domain: chat_luong,
+     role: chinh, ngay_ban_hanh: 2026-06-15, hieu_luc_tu: 2026-07-01, replaces: [nd_06_2021], level: secondary,
+     note: "Quan hệ thay thế NĐ 06/2021 là suy luận, chưa thấy nguồn ghi rõ."}
+
+  # ---------------- Hợp đồng ----------------
+  - {id: nd_37_2015, so_hieu: "37/2015/NĐ-CP", ten: "NĐ hợp đồng xây dựng", domain: hop_dong, role: chinh,
+     hieu_luc_tu: 2015-06-15, level: recall}
+  - {id: nd_50_2021, so_hieu: "50/2021/NĐ-CP", ten: "NĐ sửa đổi NĐ 37/2015 về hợp đồng xây dựng", domain: hop_dong,
+     role: sua_doi, amends: [nd_37_2015], hieu_luc_tu: 2021-04-01, level: recall}
+  - {id: nd_210_2026, so_hieu: "210/2026/NĐ-CP", ten: "NĐ hợp đồng xây dựng", domain: hop_dong, role: chinh,
+     ngay_ban_hanh: 2026-06-15, hieu_luc_tu: 2026-07-01, replaces: [nd_37_2015], level: secondary,
+     note: "Quan hệ thay thế NĐ 37/2015 là suy luận, chưa thấy nguồn ghi rõ."}
+
+  # ---------------- Đấu thầu ----------------
+  - {id: luat_43_2013, so_hieu: "43/2013/QH13", ten: "Luật Đấu thầu 2013", domain: dau_thau_luat, role: chinh,
+     hieu_luc_tu: 2014-07-01, level: recall}
+  - {id: luat_22_2023, so_hieu: "22/2023/QH15", ten: "Luật Đấu thầu 2023", domain: dau_thau_luat, role: chinh,
+     hieu_luc_tu: 2024-01-01, replaces: [luat_43_2013], level: recall}
+  - {id: luat_57_2024, so_hieu: "57/2024/QH15", ten: "Luật sửa đổi Luật Quy hoạch, Luật Đầu tư, Luật PPP, Luật Đấu thầu",
+     domain: dau_thau_luat, role: sua_doi, amends: [luat_22_2023, luat_61_2020], hieu_luc_tu: 2025-01-15, level: recall}
+  - {id: luat_90_2025, so_hieu: "90/2025/QH15", ten: "Luật sửa đổi Luật Đấu thầu, Luật PPP, ... (2025)",
+     domain: dau_thau_luat, role: sua_doi, amends: [luat_22_2023], hieu_luc_tu: 2025-07-01, level: recall}
+  - {id: nd_63_2014, so_hieu: "63/2014/NĐ-CP", ten: "NĐ hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu", domain: dau_thau_nd,
+     role: chinh, hieu_luc_tu: 2014-08-15, level: recall}
+  - {id: nd_24_2024, so_hieu: "24/2024/NĐ-CP", ten: "NĐ hướng dẫn Luật Đấu thầu về lựa chọn nhà thầu", domain: dau_thau_nd,
+     role: chinh, hieu_luc_tu: 2024-02-27, replaces: [nd_63_2014], level: recall}
+
+  # ---------------- Đầu tư, đầu tư công ----------------
+  - {id: luat_67_2014, so_hieu: "67/2014/QH13", ten: "Luật Đầu tư 2014", domain: dau_tu, role: chinh,
+     hieu_luc_tu: 2015-07-01, level: recall}
+  - {id: luat_61_2020, so_hieu: "61/2020/QH14", ten: "Luật Đầu tư 2020", domain: dau_tu, role: chinh,
+     hieu_luc_tu: 2021-01-01, replaces: [luat_67_2014], level: recall,
+     note: "Chưa rà các luật sửa đổi/thay thế sau 2025."}
+  - {id: luat_39_2019, so_hieu: "39/2019/QH14", ten: "Luật Đầu tư công 2019", domain: dau_tu_cong, role: chinh,
+     hieu_luc_tu: 2020-01-01, level: recall}
+  - {id: luat_58_2024, so_hieu: "58/2024/QH15", ten: "Luật Đầu tư công 2024", domain: dau_tu_cong, role: chinh,
+     hieu_luc_tu: 2025-01-01, replaces: [luat_39_2019], level: recall,
+     note: "Có VBHN 03/VBHN-VPQH năm 2026 -> có văn bản sửa đổi sau, chưa nạp."}
+
+  # ---------------- Đất đai, môi trường, PCCC ----------------
+  - {id: luat_45_2013, so_hieu: "45/2013/QH13", ten: "Luật Đất đai 2013", domain: dat_dai, role: chinh,
+     hieu_luc_tu: 2014-07-01, level: recall}
+  - {id: luat_31_2024, so_hieu: "31/2024/QH15", ten: "Luật Đất đai 2024", domain: dat_dai, role: chinh,
+     hieu_luc_tu: 2024-08-01, replaces: [luat_45_2013], level: recall}
+  - {id: luat_55_2014, so_hieu: "55/2014/QH13", ten: "Luật Bảo vệ môi trường 2014", domain: moi_truong, role: chinh,
+     hieu_luc_tu: 2015-01-01, level: recall}
+  - {id: luat_72_2020, so_hieu: "72/2020/QH14", ten: "Luật Bảo vệ môi trường 2020", domain: moi_truong, role: chinh,
+     hieu_luc_tu: 2022-01-01, replaces: [luat_55_2014], level: recall,
+     note: "Có điều khoản hiệu lực sớm hơn - chưa nạp."}
+  - {id: luat_27_2001, so_hieu: "27/2001/QH10", ten: "Luật Phòng cháy và chữa cháy 2001", domain: pccc, role: chinh,
+     hieu_luc_tu: 2001-10-04, level: recall}
+  - {id: luat_55_2024, so_hieu: "55/2024/QH15", ten: "Luật Phòng cháy, chữa cháy và cứu nạn, cứu hộ", domain: pccc,
+     role: chinh, hieu_luc_tu: 2025-07-01, replaces: [luat_27_2001], level: recall}
+
+  # ---------------- Thẩm quyền ----------------
+  - id: nd_140_2025
+    so_hieu: "140/2025/NĐ-CP"
+    ten: "NĐ phân định thẩm quyền của chính quyền địa phương 2 cấp trong lĩnh vực của Bộ Xây dựng"
+    domain: tham_quyen
+    role: chinh
+    ngay_ban_hanh: 2025-06-12
+    hieu_luc_tu: 2025-07-01
+    level: secondary
+    note: Một số quy định có hiệu lực hồi tố từ 01/03/2025 (chưa xác định điều/khoản).
+    sources: ["https://luatvietnam.vn/hanh-chinh/6-diem-dang-chu-y-cua-nghi-dinh-140-2025-ve-phan-dinh-tham-quyen-trong-linh-vuc-quan-ly-cua-bo-xay-dung-570-102538-article.html"]
