@@ -42,6 +42,8 @@ trùng id, tham chiếu tiên quyết không tồn tại, severity sai, vòng l�
 
 ## Giới hạn đã biết
 
+- **Căn cứ NĐ 175/2024 sai với sự kiện từ 01/07/2026** (NĐ này đã hết hiệu lực; xem
+  `docs/PLOS-danh-gia-va-ke-hoach.md` mục 4). Engine chưa chọn chế độ pháp lý theo thời điểm.
 - **Căn cứ pháp lý chưa xác minh.** Mọi `basis` đang `verified: false` và chưa có điều/khoản.
   Chuỗi trình tự lấy từ bản thiết kế của Ban QLDA, chưa đối chiếu văn bản gốc.
 - Một số quy tắc đáng ngờ đã gắn mức `soft` kèm `note` (khảo sát ← phê duyệt dự án;
@@ -51,6 +53,10 @@ trùng id, tham chiếu tiên quyết không tồn tại, severity sai, vòng l�
 - Chưa có đối soát nhất quán dữ liệu, năng lực nhà thầu, dashboard, chạy tự động khi dữ liệu đổi.
 - Chưa có bộ trích xuất PDF/Word; hồ sơ phải được nhập thành YAML.
 - Mỗi bước chỉ có một ngày bắt đầu và một ngày hoàn thành; chưa mô hình hóa nhiều đợt/hạng mục.
+
+## Kế hoạch tiếp theo
+
+Xem `docs/PLOS-danh-gia-va-ke-hoach.md`.
 
 ## Gỡ bỏ
 

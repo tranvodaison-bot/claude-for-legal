@@ -2,6 +2,10 @@
 # Nguồn: bảng 2.2 và 3.2 trong bản thiết kế của Ban QLDA.
 # Mọi `basis` đang ở trạng thái verified: false -> phải đối chiếu văn bản gốc
 # (điều/khoản) trước khi dùng kết quả làm căn cứ kết luận.
+# CẢNH BÁO (03/10/2026): theo tra cứu thứ cấp, NĐ 175/2024/NĐ-CP hết hiệu lực từ 01/07/2026
+# (thay bằng NĐ 217/2026/NĐ-CP - chưa xác minh). Căn cứ NĐ 175/2024 dưới đây chỉ có thể đúng với
+# sự kiện trước 01/07/2026. Engine chưa phân biệt chế độ pháp lý theo thời điểm (kế hoạch M2,
+# xem docs/PLOS-danh-gia-va-ke-hoach.md).
 version: 1
 steps:
   - id: lap_bcnckt
