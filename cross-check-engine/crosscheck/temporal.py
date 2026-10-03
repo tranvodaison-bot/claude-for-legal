@@ -115,7 +115,7 @@ def load_registry(path) -> Registry:
                                 f"thay thế có hiệu lực từ {d['hieu_luc_tu']}")
     # Văn bản sửa đổi hết hiệu lực cùng văn bản bị sửa đổi (nếu không khai báo khác).
     for d in docs.values():
-        if d["role"] == "sua_doi" and d.get("het_hieu_luc") is None:
+        if d["role"] == "sua_doi" and d.get("het_hieu_luc") is None and d.get("derive_expiry", True):
             ends = [docs[b].get("het_hieu_luc") for b in d.get("amends") or []]
             if ends and all(ends):
                 d["het_hieu_luc"] = max(ends)

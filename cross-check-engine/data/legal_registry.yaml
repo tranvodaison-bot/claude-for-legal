@@ -4,7 +4,8 @@
 #          secondary = tra cứu trang thứ cấp ngày 03/10/2026, chưa đọc văn bản gốc
 #          recall    = theo hiểu biết của người lập, CHƯA tra cứu
 # role   : chinh (văn bản chính của lĩnh vực) | sua_doi | hop_nhat (VBHN - lớp hiển thị, không phải nguồn gốc)
-# het_hieu_luc: để trống nếu suy ra được từ văn bản thay thế (`replaces`).
+# het_hieu_luc: để trống nếu suy ra được từ văn bản thay thế (`replaces`). Văn bản sửa đổi mặc định hết
+#   hiệu lực cùng văn bản bị sửa; đặt `derive_expiry: false` khi danh mục `amends` chưa đầy đủ.
 # Chỉ kết luận ở mức primary mới được tạo phát hiện mức ĐỎ.
 version: 1
 domains:
@@ -66,6 +67,7 @@ documents:
     role: sua_doi
     amends: [nd_15_2021]
     hieu_luc_tu: 2023-06-20
+    derive_expiry: false  # sửa nhiều NĐ còn hiệu lực sau 2024; không suy ngày hết hiệu lực từ riêng NĐ 15/2021
     level: recall
     note: Sửa đổi nhiều NĐ (danh mục đầy đủ cần xác minh); mới nạp quan hệ với NĐ 15/2021.
   - {id: nd_175_2024, so_hieu: "175/2024/NĐ-CP", ten: "NĐ quy định chi tiết một số điều và biện pháp thi hành Luật XD về quản lý hoạt động xây dựng",

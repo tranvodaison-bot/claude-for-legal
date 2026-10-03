@@ -227,3 +227,8 @@ def test_registry_rejects_overlapping_main_documents(tmp_path):
          "hieu_luc_tu": D(2021, 6, 1)}])
     with pytest.raises(RuleError, match="chồng"):
         load_registry(p)
+
+
+def test_amendment_expiry_not_derived_when_disabled():
+    assert REG.docs["nd_35_2023"].get("het_hieu_luc") is None
+    assert REG.status_at(REG.docs["nd_35_2023"], D(2025, 6, 1)) == "con"

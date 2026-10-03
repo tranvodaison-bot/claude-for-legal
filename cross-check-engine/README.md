@@ -16,7 +16,9 @@ python3 -m crosscheck examples/du_an_mau.yaml                 # báo cáo Markdo
 python3 -m crosscheck examples/du_an_nhieu_nam.yaml           # dự án 2020-2026: hiệu lực + chuyển tiếp
 python3 -m crosscheck examples/du_an_mau.yaml --format json   # JSON
 python3 -m crosscheck <ho_so.yaml> --out bao_cao.md           # ghi file (không ghi đè file có sẵn)
+python3 -m crosscheck <ho_so.yaml> --format html --out bao_cao.html   # báo cáo web tự chứa, in được
 python3 -m pytest -q                                           # chạy test
+node tests/ui_acceptance.mjs                                   # nghiệm thu giao diện (cần Node + Playwright)
 ```
 
 Mã thoát: `0` không có lỗi cứng, `1` có ít nhất một lỗi cứng, `2` lỗi đầu vào/cấu hình.
@@ -31,6 +33,14 @@ Mã thoát: `0` không có lỗi cứng, `1` có ít nhất một lỗi cứng, 
 | INFO (xanh) | Văn bản cũ được áp dụng theo chuyển tiếp (kèm lý do), thiếu viện dẫn văn bản sửa đổi, viện dẫn VBHN |
 
 Mỗi phát hiện nêu: sai ở đâu, căn cứ, độ tin cậy, cách khắc phục, truy vết.
+
+## Báo cáo web (`--format html`)
+
+Một file HTML tự chứa, không gọi mạng: tổng quan theo mức kèm **phạm vi đã kiểm**, vùng "Cần xử lý" (đỏ, vàng)
+có hướng khắc phục, bản đồ chế độ pháp lý, danh sách phát hiện có tìm kiếm (gõ không dấu được), lọc theo
+mức/đối tượng, mở truy vết, **xuất CSV theo bộ lọc** (UTF-8, chặn công thức bảng tính). Tắt JS vẫn đọc và
+in được; bản in nền trắng, mở toàn bộ chi tiết. Đặc tả: `docs/dac-ta-dashboard.md` (lập theo skill
+`dac-ta-ui-nghiep-vu` trong `skills/`).
 
 ## Hiệu lực và chuyển tiếp
 
@@ -70,6 +80,8 @@ trùng id, tham chiếu tiên quyết không tồn tại, severity sai, vòng l�
 - Chưa có: Thông tư, QCVN/TCVN, luật/nghị định ngoài 13 lĩnh vực; các luật sửa đổi Luật Đầu tư, Luật Đầu tư công
   sau 2025; quan hệ hiệu lực từng phần của văn bản **cũ** (điều khoản Luật 2014 bị thay sớm từ 01/01/2026);
   hiệu lực hồi tố của NĐ 140/2025; văn bản mà VBHN 91/2026 hợp nhất.
+- Báo cáo web: chỉ một chế độ màu tối trên màn hình (bản in sáng); chưa có điều hướng nhiều dự án;
+  nghiệm thu giao diện mới chạy trên Chromium.
 - Bản đồ chế độ pháp lý chỉ theo ngày sự kiện, chưa xét chuyển tiếp; kết luận chuyển tiếp nằm ở phần phát hiện.
 - **Căn cứ pháp lý chưa xác minh.** Mọi `basis` đang `verified: false` và chưa có điều/khoản.
   Chuỗi trình tự lấy từ bản thiết kế của Ban QLDA, chưa đối chiếu văn bản gốc.
