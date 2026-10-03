@@ -1,0 +1,149 @@
+# Quy tắc trình tự - tiên quyết (Giai đoạn 1).
+# Nguồn: bảng 2.2 và 3.2 trong bản thiết kế của Ban QLDA.
+# Mọi `basis` đang ở trạng thái verified: false -> phải đối chiếu văn bản gốc
+# (điều/khoản) trước khi dùng kết quả làm căn cứ kết luận.
+version: 1
+steps:
+  - id: lap_bcnckt
+    name: Lập BCNCKT / Báo cáo kinh tế - kỹ thuật
+    phase: chuan_bi
+
+  - id: tham_dinh_bcnckt
+    name: Thẩm định BCNCKT / Báo cáo kinh tế - kỹ thuật
+    phase: chuan_bi
+    prerequisites:
+      - step: lap_bcnckt
+        severity: hard
+        basis: &basis_nd175
+          - doc: "Nghị định 175/2024/NĐ-CP"
+            provision: null
+            verified: false
+        fix: Hoàn tất lập BCNCKT trước khi trình thẩm định; kiểm tra ngày trình thẩm định.
+
+  - id: phe_duyet_du_an
+    name: Phê duyệt dự án, quyết định đầu tư xây dựng
+    phase: chuan_bi
+    prerequisites:
+      - step: tham_dinh_bcnckt
+        severity: hard
+        basis: *basis_nd175
+        fix: Bổ sung kết quả thẩm định BCNCKT trước ngày phê duyệt, hoặc điều chỉnh hồ sơ theo đúng thứ tự.
+
+  - id: khao_sat
+    name: Khảo sát xây dựng phục vụ thiết kế triển khai
+    phase: thuc_hien
+    prerequisites:
+      - step: phe_duyet_du_an
+        severity: soft
+        basis: *basis_nd175
+        note: Mức soft do chưa xác minh khảo sát giai đoạn lập dự án có thể diễn ra trước phê duyệt hay không.
+        fix: Xác định khảo sát thuộc giai đoạn nào (lập dự án hay thiết kế triển khai) và ghi rõ trong hồ sơ.
+
+  - id: tham_tra_thiet_ke
+    name: Thẩm tra thiết kế
+    phase: thuc_hien
+    applies_if: {attr: requires_design_verification, equals: true}
+    prerequisites:
+      - step: khao_sat
+        severity: soft
+        basis: *basis_nd175
+        fix: Đối chiếu hồ sơ khảo sát dùng làm đầu vào của thẩm tra thiết kế.
+
+  - id: phe_duyet_thiet_ke_du_toan
+    name: Phê duyệt thiết kế triển khai - dự toán
+    phase: thuc_hien
+    prerequisites:
+      - step: phe_duyet_du_an
+        severity: hard
+        basis: *basis_nd175
+        fix: Phê duyệt thiết kế sau khi dự án đã được phê duyệt.
+      - step: tham_tra_thiet_ke
+        severity: hard
+        basis: *basis_nd175
+        fix: Hoàn tất thẩm tra thiết kế (nếu dự án thuộc diện bắt buộc) trước khi phê duyệt.
+
+  - id: giay_to_dat
+    name: Giấy tờ hợp pháp về đất đai / mặt bằng
+    phase: thuc_hien
+
+  - id: cap_gpxd
+    name: Cấp giấy phép xây dựng
+    phase: thuc_hien
+    applies_if: {attr: requires_permit, equals: true}
+    prerequisites:
+      - step: giay_to_dat
+        severity: hard
+        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm cấp phép)", provision: null, verified: false}]
+        fix: Bổ sung giấy tờ hợp pháp về đất trước khi nộp hồ sơ cấp phép.
+      - step: phe_duyet_thiet_ke_du_toan
+        severity: soft
+        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm cấp phép)", provision: null, verified: false}]
+        note: Bảng thiết kế ghi "thiết kế đã được phê duyệt". Cần xác minh hồ sơ cấp phép yêu cầu bước thiết kế nào (có trường hợp cấp theo giai đoạn).
+        fix: Xác nhận bước thiết kế mà hồ sơ cấp phép yêu cầu và điều chỉnh quy tắc nếu khác.
+
+  - id: ky_hop_dong_thi_cong
+    name: Ký kết hợp đồng thi công
+    phase: thuc_hien
+    prerequisites:
+      - step: phe_duyet_du_an
+        severity: hard
+        basis: *basis_nd175
+        fix: Hợp đồng chỉ ký sau khi dự án được phê duyệt; rà soát ngày ký và ngày phê duyệt.
+
+  - id: khoi_cong
+    name: Khởi công xây dựng
+    phase: thuc_hien
+    prerequisites:
+      - step: cap_gpxd
+        severity: hard
+        basis: [{doc: "Luật Xây dựng (bản có hiệu lực tại thời điểm khởi công)", provision: null, verified: false}]
+        fix: Chỉ khởi công khi đã có giấy phép xây dựng (nếu thuộc diện); lập biên bản xử lý nếu đã khởi công sớm.
+      - step: ky_hop_dong_thi_cong
+        severity: hard
+        basis: *basis_nd175
+        fix: Hoàn tất ký hợp đồng thi công trước ngày khởi công.
+
+  - id: nghiem_thu_hang_muc
+    name: Nghiệm thu hạng mục công trình
+    phase: thuc_hien
+    prerequisites:
+      - step: khoi_cong
+        severity: hard
+        basis: *basis_nd175
+        fix: Rà soát ngày nghiệm thu và nhật ký thi công.
+
+  - id: chung_nhan_an_toan_chiu_luc
+    name: Chứng nhận an toàn chịu lực / sự phù hợp chất lượng
+    phase: thuc_hien
+    applies_if: {attr: requires_safety_certification, equals: true}
+
+  - id: nghiem_thu_hoan_thanh
+    name: Nghiệm thu hoàn thành công trình
+    phase: thuc_hien
+    prerequisites:
+      - step: nghiem_thu_hang_muc
+        severity: hard
+        basis: *basis_nd175
+        fix: Hoàn tất biên bản nghiệm thu các hạng mục trước nghiệm thu hoàn thành.
+      - step: chung_nhan_an_toan_chiu_luc
+        severity: hard
+        basis: *basis_nd175
+        fix: Bổ sung chứng nhận (nếu công trình thuộc diện bắt buộc) trước khi nghiệm thu.
+
+  - id: quyet_toan_von
+    name: Quyết toán vốn đầu tư dự án hoàn thành
+    phase: ket_thuc
+    prerequisites:
+      - step: nghiem_thu_hoan_thanh
+        severity: hard
+        basis: *basis_nd175
+        fix: Quyết toán sau khi có biên bản nghiệm thu hoàn thành.
+
+  - id: ban_giao
+    name: Xác nhận hoàn thành, bàn giao đưa vào sử dụng
+    phase: ket_thuc
+    prerequisites:
+      - step: nghiem_thu_hoan_thanh
+        severity: hard
+        basis: *basis_nd175
+        fix: Bàn giao sau khi có biên bản nghiệm thu hoàn thành.
