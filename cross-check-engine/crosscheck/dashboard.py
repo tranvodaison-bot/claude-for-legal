@@ -23,6 +23,13 @@ SEV = {
 ORDER = (HARD, SOFT, GAP, INFO)
 
 
+def confidence(f: Finding) -> str:
+    # NQ-*: phép so sánh chắc chắn, nhưng dữ liệu đầu vào là khai báo của người nhập, chưa ai xác minh.
+    if f.rule_id.startswith("NQ-"):
+        return "so sánh dữ liệu khai báo"
+    return "đã xác minh" if f.verified else "cần xác minh"
+
+
 def e(value) -> str:
     return html.escape("" if value is None else str(value), quote=True)
 
@@ -54,7 +61,8 @@ def _basis_text(basis: list) -> str:
 
 def _finding(fid: str, f: Finding) -> str:
     cls = SEV[f.severity][0]
-    conf = ('<span class="tag ok">đã xác minh</span>' if f.verified
+    conf = ('<span class="tag ok">so sánh dữ liệu khai báo</span>' if f.rule_id.startswith("NQ-")
+            else '<span class="tag ok">đã xác minh</span>' if f.verified
             else '<span class="tag warn">cần xác minh</span>')
     search = " ".join([f.rule_id, f.step, f.title, f.where, f.fix or ""])
     trace = "".join(f"<li>{e(t)}</li>" for t in f.trace) or "<li>Không có</li>"
@@ -91,8 +99,37 @@ def _regime(regime: list, domains: dict) -> str:
             f"<tbody>{rows}</tbody></table></div>")
 
 
+RESULT = {"khop": ("ok", "✓", "Khớp"), "trong_han_muc": ("ok", "✓", "Trong hạn mức"),
+          "lech": ("bad", "▲", "Lệch"), "vuot": ("bad", "▲", "Vượt"), "thieu_chuan": ("gap", "○", "Thiếu chuẩn")}
+
+
+def _consistency(matrix: dict) -> str:
+    if not matrix:
+        return '<p class="empty">Chưa có văn bản nào khai báo thông tin để đối chiếu.</p>'
+    out = []
+    for key, block in matrix.items():
+        rows = []
+        for r in block["rows"]:
+            cls, mark, text = RESULT[r["result"]]
+            note = f'<span class="note">{e(r["note"])}</span>' if r["note"] else ""
+            rows.append(
+                f'<tr><th scope="row" class="mono">{e(r["doc"])}</th><td>{e(r["group"])}</td>'
+                f'<td class="num">{r["date"].strftime("%d/%m/%Y")}</td>'
+                f'<td class="{"num" if r.get("kind") == "number" else "txt"}">{e(r["value"])}'
+                + (f'<span class="note">{e(r["extra"])}</span>' if r.get("extra") else "") + '</td>'
+                f'<td>{e(r["master"] or "-")}</td>'
+                f'<td><span class="res {cls}"><span aria-hidden="true">{mark}</span> {text}</span>{note}</td></tr>')
+        out.append(
+            f'<h3 id="dc-{e(key)}">{e(block["label"])}</h3>'
+            f'<div class="scroll" role="region" aria-labelledby="dc-{e(key)}" tabindex="0"><table class="dc">'
+            '<thead><tr><th scope="col">Văn bản</th><th scope="col">Nhóm</th><th scope="col">Ngày ký</th>'
+            '<th scope="col">Giá trị</th><th scope="col">Chuẩn so sánh</th><th scope="col">Kết quả</th></tr></thead>'
+            f'<tbody>{"".join(rows)}</tbody></table></div>')
+    return "".join(out)
+
+
 def to_html(project: dict, findings: list[Finding], as_of: dt.date, regime=None, domains=None,
-            scope: dict | None = None) -> str:
+            scope: dict | None = None, consistency: dict | None = None) -> str:
     meta = project.get("project") or {}
     name = meta.get("name") or "Dự án"
     pid = meta.get("id") or "du-an"
@@ -109,6 +146,7 @@ def to_html(project: dict, findings: list[Finding], as_of: dt.date, regime=None,
         (f"{scope['registry']} văn bản trong sổ ({scope.get('primary', 0)} đã đối chiếu văn bản gốc)"
          if "registry" in scope else ""),
         f"{scope['transitions']} quy tắc chuyển tiếp" if "transitions" in scope else "",
+        f"{scope['consistency']} quy tắc nhất quán thông tin" if "consistency" in scope else "",
     ] if x)
 
     kpis = "".join(
@@ -135,7 +173,7 @@ def to_html(project: dict, findings: list[Finding], as_of: dt.date, regime=None,
 
     data = [{"id": i, "muc": f"{SEV[f.severity][1]} - {SEV[f.severity][2]}", "ma": f.rule_id, "doi_tuong": f.step,
              "tieu_de": f.title, "sai_o_dau": f.where, "can_cu": _basis_text(f.basis),
-             "do_tin_cay": "đã xác minh" if f.verified else "cần xác minh", "khac_phuc": f.fix or ""}
+             "do_tin_cay": confidence(f), "khac_phuc": f.fix or ""}
             for i, f in zip(ids, findings)]
     data_json = json.dumps({"project": pid, "as_of": as_of.isoformat(), "rows": data},
                            ensure_ascii=False).replace("<", "\\u003c")
@@ -171,6 +209,11 @@ def to_html(project: dict, findings: list[Finding], as_of: dt.date, regime=None,
   <h2 id="h-che-do">Bản đồ chế độ pháp lý</h2>
   <p class="muted">Văn bản chính có hiệu lực tại ngày từng bước, theo ngày sự kiện, chưa xét chuyển tiếp.</p>
   {_regime(regime or [], domains or {})}
+</section>
+<section aria-labelledby="h-doi-chieu">
+  <h2 id="h-doi-chieu">Bảng đối chiếu thông tin</h2>
+  <p class="muted">So từng văn bản với văn bản chuẩn có hiệu lực tại ngày ký của nó.</p>
+  {_consistency(consistency or {})}
 </section>
 <section aria-labelledby="h-tat-ca">
   <h2 id="h-tat-ca">Tất cả phát hiện</h2>
@@ -246,6 +289,13 @@ border:1px solid var(--border);font:500 15px/1.2 var(--sans);text-decoration:non
 .urgent .fix{color:var(--fg)}
 .empty{background:var(--surface);border:1px dashed var(--border);border-radius:var(--r);padding:var(--s3)}
 .scroll{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r)}
+h3{font-size:16px;font-weight:600;margin:var(--s4) 0 var(--s1);text-transform:uppercase;letter-spacing:.03em;line-height:1.4;color:var(--muted)}
+.res{font-weight:600;white-space:nowrap}.res.ok{color:var(--ok)}.res.bad{color:var(--warn)}.res.gap{color:var(--muted)}
+.note{display:block;font-size:13px;color:var(--muted);white-space:normal}
+table.dc td,table.dc th{white-space:normal}
+table.dc td.num,table.dc td:nth-child(3){white-space:nowrap}
+table.dc td:last-child{min-width:180px}
+table.dc .txt{font-family:var(--sans);min-width:150px}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{padding:var(--s1) var(--s2);border-bottom:1px solid var(--border);text-align:left;vertical-align:top;white-space:nowrap}
 thead th{background:var(--surface);color:var(--muted);font-weight:500}

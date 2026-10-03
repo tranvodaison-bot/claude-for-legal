@@ -1,0 +1,43 @@
+# Quy tắc đối soát nhất quán thông tin giữa các văn bản dự án (CR-001, đã qua CR001-G1/G3 ngày 03/10/2026).
+# Mỗi văn bản ĐÍCH được so với văn bản CHUẨN mới nhất (thuộc nhóm chuẩn, có trường đó) ký trước hoặc cùng
+# ngày văn bản đích. Sửa file này không cần sửa code; engine kiểm tính hợp lệ khi nạp.
+version: 1
+groups:
+  chu_truong: Chủ trương đầu tư
+  bcnckt_hoan_thien: BCNCKT hoàn thiện sau thẩm định
+  phe_duyet_du_an: Phê duyệt dự án
+  phe_duyet_thiet_ke: Phê duyệt thiết kế
+  gpxd: Giấy phép xây dựng
+  hop_dong: Hợp đồng
+  ke_hoach_von: Kế hoạch vốn được giao
+  hoan_cong: Hồ sơ hoàn công
+  khac: Khác
+fields:
+  ten_du_an: {label: Tên dự án, kind: text}
+  tong_muc_dau_tu: {label: Tổng mức đầu tư, kind: number, unit: đồng}
+  von_duoc_giao: {label: Vốn được giao, kind: number, unit: đồng}
+  dien_tich_san: {label: Diện tích sàn, kind: number, unit: m²}
+  chieu_cao: {label: Chiều cao công trình, kind: number, unit: m}
+  so_tang: {label: Số tầng, kind: number, unit: tầng}
+  thoi_gian_thuc_hien: {label: Thời gian thực hiện, kind: period}
+rules:
+  - {id: NQ-TEN-1, fields: [ten_du_an], master: chu_truong, targets: [phe_duyet_du_an], compare: equal_text, severity: soft}
+  - {id: NQ-TEN-2, fields: [ten_du_an], master: phe_duyet_du_an, targets: [gpxd, hop_dong, phe_duyet_thiet_ke],
+     compare: equal_text, severity: soft}
+  - {id: NQ-TMDT-1, fields: [tong_muc_dau_tu], master: bcnckt_hoan_thien, targets: [phe_duyet_du_an],
+     compare: equal_number, severity: soft,
+     fix: "Đối chiếu với BCNCKT hoàn thiện tương ứng (kể cả BCNCKT điều chỉnh nếu dự án đã điều chỉnh)."}
+  - {id: NQ-VON-1, fields: [von_duoc_giao], master: phe_duyet_du_an, master_field: tong_muc_dau_tu,
+     targets: [ke_hoach_von], compare: sum_not_exceed, severity: hard,
+     applies_if: {attr: von_dau_tu_cong, equals: true},
+     fix: "Rà lũy kế vốn được giao; giải trình hoặc điều chỉnh kế hoạch vốn / TMĐT trước khi giải ngân tiếp."}
+  - {id: NQ-QM-1, fields: [dien_tich_san, chieu_cao, so_tang], master: phe_duyet_du_an,
+     targets: [phe_duyet_thiet_ke], compare: equal_number, severity: soft}
+  - {id: NQ-QM-2, fields: [dien_tich_san, chieu_cao, so_tang], master: phe_duyet_thiet_ke,
+     targets: [gpxd, hoan_cong], compare: equal_number, severity: soft}
+  - {id: NQ-TG-1, fields: [thoi_gian_thuc_hien], master: chu_truong, targets: [phe_duyet_du_an],
+     compare: within_period, severity: soft,
+     fix: "Thời gian thực hiện vượt chủ trương: kiểm tra đã điều chỉnh chủ trương đầu tư chưa."}
+  - {id: NQ-TG-2, fields: [thoi_gian_thuc_hien], master: phe_duyet_du_an, targets: [hop_dong],
+     compare: within_period, severity: soft,
+     fix: "Tiến độ hợp đồng vượt thời gian thực hiện dự án đã duyệt tại ngày ký: rà điều chỉnh dự án/hợp đồng."}

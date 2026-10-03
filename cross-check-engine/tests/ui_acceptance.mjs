@@ -78,6 +78,28 @@ const link = await page.$("[data-open]");
 if (link) { const id = await link.getAttribute("data-open"); await link.click();
   check("Xem truy vết mở chi tiết", await page.$eval(`#${id} details`, (d) => d.open)); }
 check("Không có lỗi JS", errors.length === 0, errors.join("; "));
+
+// CR-001: bảng đối chiếu thông tin (SPEC-CR-001 mục 3, 6)
+writeFileSync(join(dir, "nq.yaml"), `project: {id: NQ-UI, name: "Kiểm thử đối chiếu"}
+attributes: {}
+steps: {}
+documents:
+  - {id: PD, nhom: phe_duyet_du_an, ngay_ky: 2021-06-01, thong_tin: {ten_du_an: "Nhà xưởng A", so_tang: 3}}
+  - {id: TK, nhom: phe_duyet_thiet_ke, ngay_ky: 2022-01-01, thong_tin: {so_tang: 3}}
+  - {id: GP, nhom: gpxd, ngay_ky: 2022-06-01, thong_tin: {ten_du_an: "<img src=x onerror=window.__xss2=1>", so_tang: 4}}
+`);
+const out2 = join(dir, "nq.html");
+execFileSync("python3", ["-m", "crosscheck", join(dir, "nq.yaml"), "--as-of", "2026-10-03", "--format", "html", "--out", out2]);
+await page.goto(pathToFileURL(out2).href);
+const tables = await page.$$eval("#h-doi-chieu ~ .scroll table, section[aria-labelledby=h-doi-chieu] table", (t) => t.length);
+check("Bảng đối chiếu có một bảng con cho mỗi trường", tables === 2, `${tables} bảng`);
+const nqResults = await page.$$eval("section[aria-labelledby=h-doi-chieu] .res", (n) => n.map((x) => x.textContent.trim()));
+check("Kết quả có chữ kèm ký hiệu", nqResults.includes("▲ Lệch") && nqResults.includes("✓ Khớp"), nqResults.join(", "));
+check("Tên chứa HTML trong thong_tin không thực thi", !(await page.evaluate(() => window.__xss2)));
+const kpi2 = await page.$$eval(".kpi-n", (n) => n.reduce((a, x) => a + +x.textContent, 0));
+check("Tổng các mức = tổng phát hiện (có phát hiện nhất quán)", kpi2 === (await page.$$eval("#list .f", (n) => n.length)), `${kpi2}`);
+await page.goto(pathToFileURL(join(dir, "r.html")).href);
+check("Hồ sơ không có thong_tin hiện trạng thái trống", (await page.textContent("section[aria-labelledby=h-doi-chieu]")).includes("Chưa có văn bản nào khai báo thông tin"));
 await browser.close();
 const failed = results.filter((x) => !x).length;
 console.log(failed ? `${failed} trường hợp LỖI` : `Tất cả ${results.length} trường hợp ĐẠT`);

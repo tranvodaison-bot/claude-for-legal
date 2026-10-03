@@ -1,9 +1,11 @@
 # cross-check-engine
 
-Engine đối soát hồ sơ dự án đầu tư xây dựng theo hai trục:
+Engine đối soát hồ sơ dự án đầu tư xây dựng theo ba trục:
 1. **Trình tự - điều kiện tiên quyết** giữa các bước (G1).
 2. **Hiệu lực và chuyển tiếp pháp luật 2021-2026**: căn cứ mà từng văn bản dự án viện dẫn có còn
-   hiệu lực tại ngày ký không, nếu đã hết thì có thuộc trường hợp chuyển tiếp không. Đầu ra là **bản nháp hỗ trợ rà soát**,
+   hiệu lực tại ngày ký không, nếu đã hết thì có thuộc trường hợp chuyển tiếp không.
+3. **Nhất quán thông tin** giữa các văn bản (tên dự án, TMĐT, quy mô, thời gian, lũy kế vốn) - CR-001.
+   Hướng dẫn: `docs/HDSD.md`. Đầu ra là **bản nháp hỗ trợ rà soát**,
 không phải kết luận pháp lý hay thẩm định; người ký/duyệt vẫn là người chịu trách nhiệm.
 
 ## Chạy nhanh
@@ -14,6 +16,7 @@ không phải kết luận pháp lý hay thẩm định; người ký/duyệt v�
 cd cross-check-engine
 python3 -m crosscheck examples/du_an_mau.yaml                 # báo cáo Markdown ra màn hình
 python3 -m crosscheck examples/du_an_nhieu_nam.yaml           # dự án 2020-2026: hiệu lực + chuyển tiếp
+python3 -m crosscheck examples/du_an_nhat_quan.yaml           # nhất quán thông tin giữa các văn bản
 python3 -m crosscheck examples/du_an_mau.yaml --format json   # JSON
 python3 -m crosscheck <ho_so.yaml> --out bao_cao.md           # ghi file (không ghi đè file có sẵn)
 python3 -m crosscheck <ho_so.yaml> --format html --out bao_cao.html   # báo cáo web tự chứa, in được
@@ -49,7 +52,8 @@ in được; bản in nền trắng, mở toàn bộ chi tiết. Đặc tả: `d
   coding, test E2E, UAT, HDSD; sổ UC Master và script kiểm truy vết.
 - Sổ truy vết của chính dự án: `docs/uc-master.yaml`. Kiểm bằng
   `python3 skills/vong-doi-yeu-cau-phan-mem/scripts/check_trace.py docs/uc-master.yaml`.
-  Hiện trạng: 3 GATE chưa có người chốt, 5 UC chưa có user story (dự án được dựng trước khi có quy trình).
+  Hồ sơ quy trình: `docs/sa-hien-trang.md`, `docs/user-stories.md`, `docs/cr/`, `docs/prd/`, `docs/spec/`,
+  `docs/gates/` (biên bản GATE; GATE-1..3 ký bù 03/10/2026).
 
 ## Hiệu lực và chuyển tiếp
 
