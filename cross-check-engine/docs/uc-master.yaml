@@ -7,6 +7,7 @@ gates:
   - {id: GATE-3, scope: "Luồng xử lý + định dạng dữ liệu vào/ra (YAML hồ sơ, sổ văn bản, quy tắc chuyển tiếp, CLI)", by: "Boss (Ban QLDA)", date: 2026-10-03, record: docs/gates/GATE-3.md}
   - {id: CR001-G1, scope: "CR-001: docs/prd/PRD-CR-001.md v1.0 (mô hình dữ liệu, UC-007, giả định A1-A5)", by: "Boss (Ban QLDA)", date: 2026-10-03, record: docs/gates/CR001-G1.md}
   - {id: CR001-G2, scope: "CR-001: màn hình Bảng đối chiếu - docs/spec/SPEC-CR-001.md mục 3", by: "Boss (Ban QLDA)", date: 2026-10-03, record: docs/gates/CR001-G2.md}
+  - {id: CR002-GCR, scope: "CR-002: bảng đối chiếu dạng thẻ dưới 768px (GATE CR + GATE 2)", by: "Boss (Ban QLDA)", date: 2026-10-04, record: docs/gates/CR002-GCR.md}
   - {id: CR001-G3, scope: "CR-001: quy tắc + luồng + CLI - docs/spec/SPEC-CR-001.md mục 1, 2, 4", by: "Boss (Ban QLDA)", date: 2026-10-03, record: docs/gates/CR001-G3.md}
 use_cases:
   - id: UC-001
@@ -37,7 +38,7 @@ use_cases:
     screens: [MH-BAO-CAO-WEB]
     tests: [TC-DSB, TC-UI]
     gates: [GATE-1, GATE-2]
-    cr: [CR-001]
+    cr: [CR-001, CR-002]
   - id: UC-005
     name: Báo cáo Markdown / JSON
     status: tested
@@ -54,8 +55,8 @@ use_cases:
     tests: [TC-NQ, TC-UI]
     hdsd: [HDSD-2]
     stories: [US-007a, US-007b, US-007c, US-007d, US-007e, US-007f]   # docs/spec/SPEC-CR-001.md mục 5
-    gates: [CR001-G1, CR001-G2, CR001-G3]
-    cr: [CR-001]
+    gates: [CR001-G1, CR001-G2, CR001-G3, CR002-GCR]
+    cr: [CR-001, CR-002]
   - id: UC-006
     name: Trích xuất hồ sơ PDF/Word thành YAML (kế hoạch M4)
     status: draft

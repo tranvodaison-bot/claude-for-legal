@@ -98,6 +98,23 @@ check("Kết quả có chữ kèm ký hiệu", nqResults.includes("▲ Lệch") 
 check("Tên chứa HTML trong thong_tin không thực thi", !(await page.evaluate(() => window.__xss2)));
 const kpi2 = await page.$$eval(".kpi-n", (n) => n.reduce((a, x) => a + +x.textContent, 0));
 check("Tổng các mức = tổng phát hiện (có phát hiện nhất quán)", kpi2 === (await page.$$eval("#list .f", (n) => n.length)), `${kpi2}`);
+// CR-002: dưới 768px kết quả nằm trong khung nhìn, không cần cuộn ngang
+const mobile = await browser.newPage({ viewport: { width: 390, height: 900 } });
+await mobile.goto(pathToFileURL(out2).href);
+const off = await mobile.$$eval("table.dc .c-res .res", (n) => n.filter((x) => x.getBoundingClientRect().right > window.innerWidth + 1).length);
+const scrolls = await mobile.$$eval("table.dc", (t) => t.filter((x) => x.parentElement.scrollWidth > x.parentElement.clientWidth + 1).length);
+check("CR-002: 390px kết quả mọi dòng trong khung nhìn, bảng không cuộn ngang", off === 0 && scrolls === 0, `${off} ô ngoài khung, ${scrolls} bảng cuộn`);
+const firstIsRes = await mobile.$eval("table.dc tbody tr", (tr) => {
+  const r = tr.querySelector(".c-res .res").getBoundingClientRect(), g = tr.querySelector(".c-grp").getBoundingClientRect();
+  return r.top < g.top; });
+check("CR-002: kết quả đứng đầu thẻ", firstIsRes);
+const noteLast = await mobile.$$eval("table.dc tbody tr", (trs) => trs.every((tr) => {
+  const n = tr.querySelector(".c-res .note"); if (!n) return true;
+  return n.getBoundingClientRect().top >= tr.querySelector(".c-mst").getBoundingClientRect().bottom - 1; }));
+check("CR-002: ghi chú nằm cuối thẻ (theo mockup)", noteLast);
+const wide = await browser.newPage({ viewport: { width: 1024, height: 900 } });
+await wide.goto(pathToFileURL(out2).href);
+check("CR-002: từ 768px vẫn là bảng có tiêu đề cột", await wide.$eval("table.dc thead", (h) => getComputedStyle(h).position !== "absolute"));
 await page.goto(pathToFileURL(join(dir, "r.html")).href);
 check("Hồ sơ không có thong_tin hiện trạng thái trống", (await page.textContent("section[aria-labelledby=h-doi-chieu]")).includes("Chưa có văn bản nào khai báo thông tin"));
 await browser.close();

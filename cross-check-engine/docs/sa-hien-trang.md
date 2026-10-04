@@ -1,6 +1,6 @@
 # SA hiện trạng - cross-check-engine
 
-Cập nhật lần cuối: 03/10/2026, sau CR-001 (đối soát nhất quán thông tin).
+Cập nhật lần cuối: 04/10/2026, sau CR-002 (bảng đối chiếu dạng thẻ trên điện thoại).
 
 ## 1. Thành phần
 
@@ -42,10 +42,9 @@ Không có. Không gọi mạng; báo cáo HTML không tải tài nguyên ngoài
 
 ## 5. Kiểm thử
 `tests/test_engine.py`, `tests/test_temporal.py`, `tests/test_dashboard.py`, `tests/test_consistency.py`
-(pytest, 80 test); `tests/ui_acceptance.mjs` (Playwright, 17 trường hợp); sổ truy vết `docs/uc-master.yaml` + `check_trace.py`.
+(pytest, 80 test); `tests/ui_acceptance.mjs` (Playwright, 21 trường hợp); sổ truy vết `docs/uc-master.yaml` + `check_trace.py`.
 
 ## 6. Nợ kỹ thuật / giới hạn đã biết
 - `thong_tin` nhập tay; chưa trích tự động từ PDF/Word (M4) - số liệu là khai báo, chưa ai xác minh.
-- Trên điện thoại, bảng đối chiếu cuộn ngang, cột Kết quả nằm cuối (đúng đặc tả đã chốt; đề xuất CR-002).
 - Chưa có CSDL, vòng đời Finding, phân quyền (kế hoạch M1, M3, M5).
 - Mọi ngày hiệu lực chưa ở mức `primary`.

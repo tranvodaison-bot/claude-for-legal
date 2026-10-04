@@ -113,12 +113,12 @@ def _consistency(matrix: dict) -> str:
             cls, mark, text = RESULT[r["result"]]
             note = f'<span class="note">{e(r["note"])}</span>' if r["note"] else ""
             rows.append(
-                f'<tr><th scope="row" class="mono">{e(r["doc"])}</th><td>{e(r["group"])}</td>'
-                f'<td class="num">{r["date"].strftime("%d/%m/%Y")}</td>'
-                f'<td class="{"num" if r.get("kind") == "number" else "txt"}">{e(r["value"])}'
+                f'<tr><th scope="row" class="mono c-doc">{e(r["doc"])}</th><td class="c-grp">{e(r["group"])}</td>'
+                f'<td class="num c-date">{r["date"].strftime("%d/%m/%Y")}</td>'
+                f'<td class="{"num" if r.get("kind") == "number" else "txt"} c-val" data-label="Giá trị">{e(r["value"])}'
                 + (f'<span class="note">{e(r["extra"])}</span>' if r.get("extra") else "") + '</td>'
-                f'<td>{e(r["master"] or "-")}</td>'
-                f'<td><span class="res {cls}"><span aria-hidden="true">{mark}</span> {text}</span>{note}</td></tr>')
+                f'<td class="c-mst" data-label="Chuẩn">{e(r["master"] or "-")}</td>'
+                f'<td class="c-res"><span class="res {cls}"><span aria-hidden="true">{mark}</span> {text}</span>{note}</td></tr>')
         out.append(
             f'<h3 id="dc-{e(key)}">{e(block["label"])}</h3>'
             f'<div class="scroll" role="region" aria-labelledby="dc-{e(key)}" tabindex="0"><table class="dc">'
@@ -325,6 +325,20 @@ textarea{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--
 footer{margin-top:var(--s5);padding-top:var(--s4);padding-bottom:var(--s5);border-top:1px solid var(--border);font-size:14px}
 html:not(.js) .toolbar,html:not(.js) #csvfallback{display:none}
 @media (max-width:1023px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* CR-002: dưới 768px mỗi dòng bảng đối chiếu thành thẻ, kết quả đứng đầu; HTML vẫn là bảng */
+@media (max-width:767px){
+ table.dc thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ table.dc,table.dc tbody{display:block}
+ table.dc tr{display:grid;grid-template-columns:minmax(0,1fr) auto;
+   grid-template-areas:"res doc" "grp date" "val val" "mst mst" "note note";gap:4px var(--s2);padding:var(--s2) var(--s3);border-bottom:1px solid var(--border)}
+ table.dc tr>*{display:block;border:0;padding:0;min-width:0!important;text-align:left;white-space:normal}
+ table.dc tr>.c-res{display:contents}table.dc .c-res>.res{grid-area:res}table.dc .c-res>.note{grid-area:note}
+ table.dc .c-doc{grid-area:doc;text-align:right}
+ table.dc .c-grp{grid-area:grp;color:var(--muted);font-size:14px}table.dc .c-date{grid-area:date;color:var(--muted);font-size:14px;text-align:right}
+ table.dc .c-val{grid-area:val}table.dc .c-mst{grid-area:mst}
+ table.dc .c-val::before,table.dc .c-mst::before{content:attr(data-label);display:inline-block;min-width:64px;margin-right:var(--s1);color:var(--muted);font:14px var(--sans)}
+ .scroll:has(table.dc){overflow-x:visible}
+}
 @media (max-width:767px){
  h1{font-size:26px}
  .cols{display:none}
