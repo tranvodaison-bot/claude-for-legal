@@ -21,7 +21,7 @@ DEFAULT_CONSISTENCY = DATA / "consistency_rules.yaml"
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="crosscheck", description="Đối soát trình tự - tiên quyết hồ sơ dự án")
-    ap.add_argument("project", help="file YAML hồ sơ dự án")
+    ap.add_argument("project", help="hồ sơ dự án: file YAML hoặc Excel .xlsx")
     ap.add_argument("--rules", default=str(DEFAULT_RULES), help="file YAML quy tắc")
     ap.add_argument("--registry", default=str(DEFAULT_REGISTRY), help="file YAML sổ văn bản theo thời gian")
     ap.add_argument("--transitions", default=str(DEFAULT_TRANSITIONS), help="file YAML quy tắc chuyển tiếp")
@@ -33,13 +33,17 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
     try:
         rules = load_rules(args.rules)
-        project = load_project(args.project)
+        cons_cfg = load_consistency_rules(args.consistency)
+        if args.project.lower().endswith(".xlsx"):
+            from .excel import load_project_xlsx  # chỉ cần openpyxl khi dùng Excel (CR-003)
+            project = load_project_xlsx(args.project, rules, cons_cfg)
+        else:
+            project = load_project(args.project)
         as_of = parse_date(args.as_of, "--as-of") or dt.date.today()
         registry = load_registry(args.registry)
         transitions = load_transitions(args.transitions, registry)
         findings = evaluate(project, rules, as_of, registry=registry)
         findings += check_citations(project, registry, transitions)
-        cons_cfg = load_consistency_rules(args.consistency)
         cons_findings, matrix = check_consistency(project, cons_cfg)
         findings += cons_findings
         findings.sort(key=lambda f: SEVERITY_ORDER[f.severity])

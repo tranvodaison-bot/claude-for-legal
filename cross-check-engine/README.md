@@ -10,13 +10,15 @@ không phải kết luận pháp lý hay thẩm định; người ký/duyệt v�
 
 ## Chạy nhanh
 
-Điều kiện: Python 3.10+ và PyYAML (`pip install pyyaml`; test cần thêm `pytest`).
+Điều kiện: Python 3.10+ và PyYAML (`pip install pyyaml`); nhập liệu Excel cần thêm `openpyxl` và `defusedxml` (chống tấn công XML khi đọc file từ bên ngoài); test cần `pytest`.
 
 ```bash
 cd cross-check-engine
 python3 -m crosscheck examples/du_an_mau.yaml                 # báo cáo Markdown ra màn hình
 python3 -m crosscheck examples/du_an_nhieu_nam.yaml           # dự án 2020-2026: hiệu lực + chuyển tiếp
 python3 -m crosscheck examples/du_an_nhat_quan.yaml           # nhất quán thông tin giữa các văn bản
+python3 -m crosscheck.excel mau ho_so.xlsx                     # tạo file Excel mẫu để điền hồ sơ
+python3 -m crosscheck ho_so.xlsx --format html --out bc.html   # chạy trực tiếp từ file Excel
 python3 -m crosscheck examples/du_an_mau.yaml --format json   # JSON
 python3 -m crosscheck <ho_so.yaml> --out bao_cao.md           # ghi file (không ghi đè file có sẵn)
 python3 -m crosscheck <ho_so.yaml> --format html --out bao_cao.html   # báo cáo web tự chứa, in được

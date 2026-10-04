@@ -1,6 +1,6 @@
 # SA hiện trạng - cross-check-engine
 
-Cập nhật lần cuối: 04/10/2026, sau CR-002 (bảng đối chiếu dạng thẻ trên điện thoại).
+Cập nhật lần cuối: 04/10/2026, sau CR-003 (nhập hồ sơ từ Excel).
 
 ## 1. Thành phần
 
@@ -10,13 +10,14 @@ Cập nhật lần cuối: 04/10/2026, sau CR-002 (bảng đối chiếu dạng 
 | Engine trình tự | `crosscheck/engine.py` | Mô hình `Finding`; nạp/kiểm `procedure_rules.yaml` (trùng id, tham chiếu hỏng, vòng lặp); đánh giá tiên quyết và thứ tự thời gian; tra căn cứ theo lĩnh vực + ngày |
 | Engine thời gian | `crosscheck/temporal.py` | Sổ văn bản (`Registry`), hiệu lực từng phần, suy ngày hết hiệu lực, quy tắc chuyển tiếp, đối soát căn cứ viện dẫn, bản đồ chế độ pháp lý |
 | Engine nhất quán | `crosscheck/consistency.py` | Nạp/kiểm `consistency_rules.yaml`; chuỗi phiên bản văn bản (`thay_the` + ngày ký); so văn bản đích với chuẩn có hiệu lực tại ngày ký; bảng đối chiếu (CR-001) |
+| Nhập Excel | `crosscheck/excel.py` | Đọc `.xlsx` thành hồ sơ (kiểm lỗi theo ô, gom hết); tạo mẫu 6 sheet; chuyển YAML→Excel. Phụ thuộc `openpyxl` chỉ khi dùng (CR-003) |
 | Báo cáo văn bản | `crosscheck/report.py` | Markdown, JSON |
 | Báo cáo web | `crosscheck/dashboard.py` | HTML tự chứa: tổng quan, cần xử lý, bản đồ chế độ, danh sách phát hiện, lọc, CSV, in |
 
 ## 2. Luồng dữ liệu
 
 ```
-project.yaml ──┐
+project.yaml | project.xlsx (excel.load_project_xlsx) ──┐
 procedure_rules.yaml ──► engine.evaluate ─────────────┐
 legal_registry.yaml ──► temporal.load_registry ───────┤
 transition_rules.yaml ─► temporal.check_citations ────┼─► findings (sắp theo mức) ─► md | json | html
@@ -42,9 +43,11 @@ Không có. Không gọi mạng; báo cáo HTML không tải tài nguyên ngoài
 
 ## 5. Kiểm thử
 `tests/test_engine.py`, `tests/test_temporal.py`, `tests/test_dashboard.py`, `tests/test_consistency.py`
-(pytest, 80 test); `tests/ui_acceptance.mjs` (Playwright, 21 trường hợp); sổ truy vết `docs/uc-master.yaml` + `check_trace.py`.
+`tests/test_excel.py` (pytest, tổng 94 test, có ca mở/lưu lại bằng LibreOffice Calc); `tests/ui_acceptance.mjs` (Playwright, 21 trường hợp); sổ truy vết `docs/uc-master.yaml` + `check_trace.py`.
 
 ## 6. Nợ kỹ thuật / giới hạn đã biết
-- `thong_tin` nhập tay; chưa trích tự động từ PDF/Word (M4) - số liệu là khai báo, chưa ai xác minh.
+- Hồ sơ nhập tay (YAML hoặc Excel); chưa trích tự động từ PDF/Word (M4) - số liệu là khai báo, chưa ai xác minh.
+- Phát hiện chưa ghi vị trí ô Excel nguồn trong phần truy vết (đề xuất CR sau).
+- Chưa kiểm thử với Microsoft Excel (đã kiểm openpyxl + LibreOffice Calc). Đọc file ngoài: cần cài `defusedxml`.
 - Chưa có CSDL, vòng đời Finding, phân quyền (kế hoạch M1, M3, M5).
 - Mọi ngày hiệu lực chưa ở mức `primary`.

@@ -1,11 +1,13 @@
-# Hướng dẫn sử dụng cross-check-engine · v0.3 · 03/10/2026
+# Hướng dẫn sử dụng cross-check-engine · v0.4 · 04/10/2026
 
-Tài liệu này hướng dẫn chức năng **đối soát nhất quán thông tin (UC-007)**. Các chức năng có trước
+Tài liệu này hướng dẫn **đối soát nhất quán thông tin (UC-007)** và **nhập hồ sơ từ Excel (UC-008)**. Các chức năng có trước
 (UC-001…005) đang được hướng dẫn trong `README.md`; sẽ chuyển dần vào tài liệu này.
 
 ## 1. Giới thiệu
 - **Dùng cho:** cán bộ Ban QLDA, pháp chế, kiểm toán nội bộ.
-- **Yêu cầu máy:** Python 3.10+ và PyYAML. Mở báo cáo web bằng trình duyệt bất kỳ, không cần mạng.
+- **Yêu cầu máy:** Python 3.10+ và PyYAML; thêm `openpyxl` và `defusedxml` nếu nhập liệu bằng Excel
+  (`pip install pyyaml openpyxl defusedxml`; `defusedxml` chặn file Excel độc hại). Mở báo cáo web bằng trình duyệt bất kỳ, không cần mạng.
+- Các lệnh chạy từ thư mục `cross-check-engine/`.
 - **Lưu ý:** kết quả là bản nháp hỗ trợ rà soát, không phải kết luận pháp lý.
 
 ## 2. Đối soát nhất quán thông tin giữa các văn bản (UC-007)
@@ -75,6 +77,55 @@ sách phát hiện; hồ sơ không có `thong_tin` vẫn chạy như trước.
 | `NQ-PB` (vàng) | `thay_the` trỏ văn bản khác nhóm/không tồn tại/ký sau | Sửa `thay_the` |
 | Không có NQ-VON-1 | Dự án không khai báo vốn đầu tư công | Đúng thiết kế: dự án vốn tư nhân không có kế hoạch vốn được giao |
 | Mã thoát 2 | File quy tắc `--consistency` sai | Đọc thông báo lỗi; sửa `data/consistency_rules.yaml` |
+
+## 3. Nhập hồ sơ dự án từ Excel (UC-008)
+
+**Mục đích.** Điền hồ sơ trong Excel thay vì viết YAML. Engine đọc thẳng file `.xlsx`.
+
+### Bước 1 - Lấy file mẫu
+```bash
+python3 -m crosscheck.excel mau ho_so.xlsx                     # mẫu trống
+python3 -m crosscheck.excel tu-yaml ho_so_cu.yaml ho_so.xlsx   # hoặc chuyển hồ sơ YAML đang có
+```
+Lệnh không ghi đè file đã có. File gồm 6 sheet: **HuongDan** (cách điền + danh mục cho danh sách chọn - không
+đọc dữ liệu), **DuAn**, **TrinhTu**, **HopDong**, **VanBan**, **CanCu**.
+
+![Sheet HuongDan](hdsd/img/04-excel-huong-dan.png)
+
+### Bước 2 - Điền
+- Cột có `*` bắt buộc; cột có `▼` chọn từ danh sách (nhãn tiếng Việt; gõ mã như `completed` cũng được).
+- **DuAn:** mã, tên dự án; bốn thuộc tính Có / Không (để trống = chưa khai báo).
+- **TrinhTu:** mỗi dòng một bước - trạng thái, ngày bắt đầu / hoàn thành, chứng cứ.
+- **VanBan:** mỗi dòng một văn bản - nhóm, các ngày, mã hợp đồng, văn bản bị thay thế (mã, cách nhau dấu
+  phẩy), các trường thông tin để đối chiếu (tên dự án, TMĐT, vốn được giao, quy mô, thời gian thực hiện).
+- **CanCu:** mỗi dòng một căn cứ viện dẫn: mã văn bản, văn bản viện dẫn, điều/khoản (chỉ khi cần).
+- Ngày: ô kiểu ngày, hoặc gõ `dd/mm/yyyy`. Số: ô kiểu số, hoặc gõ `120.000.000.000`, `24,5`.
+
+![Sheet VanBan](hdsd/img/05-excel-van-ban.png)
+
+_Ảnh: bản in LibreOffice Calc của file chuyển từ hồ sơ mẫu `du_an_nhat_quan`._
+
+### Bước 3 - Chạy như hồ sơ YAML
+```bash
+python3 -m crosscheck ho_so.xlsx --format html --out bao_cao.html
+```
+Nếu nhập sai, engine **không chạy đối soát** mà liệt kê toàn bộ lỗi theo ô, ví dụ:
+```
+Lỗi: file loi.xlsx có 3 lỗi nhập liệu, chưa chạy đối soát.
+  TrinhTu!B4  Trạng thái "xong" không hợp lệ. Chọn: Chưa bắt đầu, Đang thực hiện, Hoàn thành, Không áp dụng.
+  VanBan!D7  Ngày ký "31/02/2023" không phải ngày hợp lệ. Dùng dd/mm/yyyy.
+  CanCu!A3  Mã văn bản "QD-PD-DAA" không có trong sheet VanBan.
+```
+Sửa đúng các ô được nêu rồi chạy lại.
+
+### Lỗi thường gặp
+| Hiện tượng | Nguyên nhân | Cách xử lý |
+|---|---|---|
+| `Ô công thức chưa có giá trị đã tính` | File tạo bằng công cụ không tính công thức | Mở bằng Excel/LibreOffice, lưu lại; hoặc nhập giá trị |
+| `chỉ nhận file .xlsx` | File `.xls` đời cũ hoặc đổi đuôi | Excel: Lưu thành → Excel Workbook (.xlsx) |
+| `Thiếu cột bắt buộc` | Đổi tên/xóa tiêu đề cột | Lấy lại tiêu đề từ file mẫu (thứ tự cột có thể đổi, tên thì không) |
+| `Cần thư viện openpyxl` | Máy chưa cài | `pip install openpyxl` |
+| `No module named crosscheck` | Chạy lệnh ngoài thư mục dự án | `cd cross-check-engine` rồi chạy lại |
 
 ## Phụ lục - Sửa quy tắc
 `data/consistency_rules.yaml`: nhóm văn bản, trường, quy tắc (chuẩn → đích, kiểu so, dung sai `tolerance`

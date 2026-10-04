@@ -1,7 +1,7 @@
 # User stories
 
 US-001…005: viết bù ngày 03/10/2026 cho chức năng đã dựng trước khi có quy trình (mô tả hành vi hiện có,
-không thêm chức năng). US-007a…f: thuộc CR-001 - nội dung tại docs/spec/SPEC-CR-001.md mục 5 (đã qua GATE, đã dựng, kiểm bằng TC-NQ, TC-UI).
+không thêm chức năng). US-007a…f: thuộc CR-001 - nội dung tại docs/spec/SPEC-CR-001.md mục 5 (đã qua GATE, đã dựng, kiểm bằng TC-NQ, TC-UI). US-008a…f: thuộc CR-003 - docs/spec/SPEC-CR-003.md mục 6 (đã dựng, kiểm bằng TC-XL).
 
 ## US-001 · UC-001 · Đối soát trình tự - tiên quyết
 Là cán bộ Ban QLDA, tôi muốn biết bước nào đã làm khi bước tiên quyết chưa xong hoặc làm sớm hơn ngày
