@@ -1,0 +1,21 @@
+# DỰ ÁN GIẢ LẬP để chạy thử engine. Không phải dữ liệu thật.
+project:
+  id: DEMO-001
+  name: Dự án mẫu (giả lập)
+attributes:
+  requires_permit: true
+  requires_design_verification: true
+  # requires_safety_certification: chưa khai báo -> kỳ vọng DATA_GAP
+steps:
+  lap_bcnckt: {status: completed, date: 2025-01-10, evidence: "BCNCKT-01"}
+  tham_dinh_bcnckt: {status: completed, date: 2025-02-20, evidence: "TD-02"}
+  phe_duyet_du_an: {status: completed, date: 2025-03-05, evidence: "QD-PD-03"}
+  khao_sat: {status: not_applicable}
+  tham_tra_thiet_ke: {status: in_progress, start_date: 2025-05-01}
+  phe_duyet_thiet_ke_du_toan: {status: completed, date: 2025-05-20, evidence: "QD-TK-05"}
+  giay_to_dat: {status: completed, date: 2025-04-01}
+  cap_gpxd: {status: completed, date: 2025-09-10, evidence: "GPXD-09"}
+  ky_hop_dong_thi_cong: {status: completed, date: 2025-02-28, evidence: "HD-02"}
+  khoi_cong: {status: completed, date: 2025-08-01, evidence: "BB-KC-08"}
+  nghiem_thu_hang_muc: {status: completed, date: 2026-02-15}
+  nghiem_thu_hoan_thanh: {status: in_progress, start_date: 2026-03-01}

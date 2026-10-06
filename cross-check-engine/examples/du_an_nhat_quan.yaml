@@ -1,0 +1,62 @@
+# DỰ ÁN GIẢ LẬP cho CR-001 (đối soát nhất quán thông tin). Không phải dữ liệu thật.
+# Kịch bản cài sẵn: tên lệch ở GPXD, TMĐT lệch BCNCKT, lũy kế vốn vượt TMĐT, số tầng GPXD lệch thiết kế,
+# điều chỉnh dự án kéo dài vượt chủ trương, hợp đồng vượt thời gian dự án TẠI NGÀY KÝ, thay_the sai nhóm.
+project:
+  id: DEMO-NQ
+  name: Dự án mẫu nhất quán thông tin (giả lập)
+attributes:
+  von_dau_tu_cong: true
+steps: {}
+documents:
+  - id: CT-01
+    nhom: chu_truong
+    ngay_ky: 2021-01-15
+    thong_tin: {ten_du_an: "Nhà xưởng A", thoi_gian_thuc_hien: {tu: 2021-03-01, den: 2025-12-31}}
+  - id: BCNCKT-HT
+    nhom: bcnckt_hoan_thien
+    ngay_ky: 2021-05-20
+    thong_tin: {tong_muc_dau_tu: 118000000000}
+  - id: QD-PD-DA
+    nhom: phe_duyet_du_an
+    ngay_ky: 2021-06-10
+    thong_tin:
+      ten_du_an: "Nhà xưởng  A."
+      tong_muc_dau_tu: 120000000000
+      dien_tich_san: 12500
+      chieu_cao: 24.5
+      so_tang: 3
+      thoi_gian_thuc_hien: {tu: 2021-06-01, den: 2025-12-31}
+  - id: KHV-2022
+    nhom: ke_hoach_von
+    ngay_ky: 2022-01-15
+    thong_tin: {von_duoc_giao: 40000000000}
+  - id: QD-PD-TK
+    nhom: phe_duyet_thiet_ke
+    ngay_ky: 2022-03-20
+    thong_tin: {ten_du_an: "Nhà xưởng A", dien_tich_san: 12500, chieu_cao: 24.5, so_tang: 3}
+  - id: KHV-2023
+    nhom: ke_hoach_von
+    ngay_ky: 2023-01-10
+    thong_tin: {von_duoc_giao: 50000000000}
+  - id: GPXD-01
+    nhom: gpxd
+    ngay_ky: 2023-05-10
+    thong_tin: {ten_du_an: "Nhà xưởng B", dien_tich_san: 12500, chieu_cao: 24.5, so_tang: 4}
+  - id: KHV-2024
+    nhom: ke_hoach_von
+    ngay_ky: 2024-01-12
+    thong_tin: {von_duoc_giao: 35000000000}
+  - id: HD-TC-01
+    nhom: hop_dong
+    ngay_ky: 2024-11-15
+    thong_tin: {ten_du_an: "Nhà xưởng A", thoi_gian_thuc_hien: {tu: 2024-12-01, den: 2026-06-30}}
+  - id: QD-DC-DA
+    nhom: phe_duyet_du_an
+    ngay_ky: 2026-09-01
+    thay_the: [QD-PD-DA]
+    thong_tin: {tong_muc_dau_tu: 135000000000, thoi_gian_thuc_hien: {tu: 2021-06-01, den: 2026-12-31}}
+  - id: QD-DC-TK
+    nhom: phe_duyet_thiet_ke
+    ngay_ky: 2026-09-20
+    thay_the: [GPXD-01]
+    thong_tin: {so_tang: 3}
